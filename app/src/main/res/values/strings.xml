@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Voluntask</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="login">Bem vindo de volta!</string>
+    <string name="home">Home</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="choose_gender_prompt">Escolha um gênero</string>
+    <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</string>
+    <string name="Cadastrar">Ainda não tem uma conta? <font color='#6F70B5'>Cadastre-se</font></string>
+
+    <string-array name="genders">
+        <item>Masculino</item>
+        <item>Feminino</item>
+        <item>Prefiro não dizer</item>
+    </string-array>
+</resources>
