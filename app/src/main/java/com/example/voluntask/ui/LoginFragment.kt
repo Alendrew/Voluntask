@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.voluntask.R
 import com.example.voluntask.databinding.FragmentLoginBinding
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
@@ -59,6 +60,11 @@ class LoginFragment : Fragment() {
                 loadingUI.btnToLoading()
                 viewModel.login(email, senha) { resultado ->
                     if (resultado.result) {
+                        viewModel.getUserInfo(resultado.user!!.uid.toString()) { usuario ->
+                            if (usuario!!.tipoConta == TipoConta.VOLUNTARIO){
+
+                            }
+                        }
                         Navigation.findNavController(binding.root)
                             .navigate(R.id.action_loginFragment_to_homeFragment)
                     } else {

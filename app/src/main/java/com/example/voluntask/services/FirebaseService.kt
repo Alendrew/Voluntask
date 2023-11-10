@@ -1,13 +1,17 @@
 package com.example.voluntask.services
 
 import android.util.Log
+import com.example.voluntask.models.Instituicao
+import com.example.voluntask.models.Instituicao.Companion.toObject
 import com.example.voluntask.models.Usuario
+import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.example.voluntask.util.Resultado
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -23,6 +27,15 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         } catch (e: Exception) {
             Log.e(TAG, "Error adding", e)
             false
+        }
+    }
+
+    suspend fun getItemById(idItem: String): DocumentSnapshot? {
+        return try{
+            itemCollections.document(idItem).get().await()
+        }catch (e: Exception){
+            Log.e(TAG,"Error getting item by id", e)
+            null
         }
     }
 
@@ -42,6 +55,32 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             Log.e(TAG, "Error updating", e)
         }
 
+    }
+
+
+    suspend fun getUserInfo(idUser: String): Usuario? {
+        val voluntariosCollection = db.collection("Voluntarios")
+        val instituicaoCollection = db.collection("Instituicoes")
+        var userInfo: DocumentSnapshot
+        try {
+            userInfo = voluntariosCollection.document(idUser).get().await()
+            if (!userInfo.exists()) {
+                userInfo = instituicaoCollection.document(idUser).get().await()
+            }
+
+            if (userInfo.exists()) {
+                val tipoConta = userInfo.get("tipoConta") as Int
+
+                return if (tipoConta == 0) {
+                    userInfo.toObject(Voluntario::class.java)
+                } else {
+                    userInfo.toObject(Instituicao::class.java)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG,"Error getting user info", e)
+        }
+        return null
     }
 
     suspend fun getAllItems(item: T): List<T> {
@@ -88,7 +127,6 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
     companion object {
         const val TAG = "FirebaseService"
         private val auth = Firebase.auth
-
 
         suspend fun forgetPassword(email: String): Resultado {
             try {

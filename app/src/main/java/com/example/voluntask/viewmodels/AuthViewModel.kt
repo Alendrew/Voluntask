@@ -7,6 +7,7 @@ import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.Voluntario
 import com.example.voluntask.services.FirebaseService
 import com.example.voluntask.util.Resultado
+import com.google.firebase.auth.UserInfo
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -14,6 +15,12 @@ class AuthViewModel : ViewModel() {
     fun login(email: String, senha: String, callback: (Resultado) -> Unit) {
         viewModelScope.launch {
             callback(FirebaseService.loginWithEmail(email, senha))
+        }
+    }
+
+    fun getUserInfo(idUser: String,callback: (Usuario?) -> Unit){
+        viewModelScope.launch {
+            callback(FirebaseService<Usuario>("").getUserInfo(idUser))
         }
     }
 
