@@ -13,7 +13,12 @@
         <action
             android:id="@+id/action_loginFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:enterAnim="@android:anim/slide_in_left" />
+            app:enterAnim="@android:anim/slide_in_left" >
+<!--            <argument-->
+<!--                android:name="teste"-->
+<!--                app:argType="integer"-->
+<!--                android:defaultValue="1" />-->
+        </action>
         <action
             android:id="@+id/action_loginFragment_to_escolherContaFragment"
             app:destination="@id/escolherContaFragment"

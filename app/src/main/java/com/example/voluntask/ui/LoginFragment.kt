@@ -5,6 +5,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -61,12 +62,10 @@ class LoginFragment : Fragment() {
                 viewModel.login(email, senha) { resultado ->
                     if (resultado.result) {
                         viewModel.getUserInfo(resultado.user!!.uid.toString()) { usuario ->
-                            if (usuario!!.tipoConta == TipoConta.VOLUNTARIO){
-
-                            }
+                            val bundle = bundleOf("usuario" to usuario)
+                            Navigation.findNavController(binding.root)
+                                .navigate(R.id.action_loginFragment_to_homeFragment, bundle)
                         }
-                        Navigation.findNavController(binding.root)
-                            .navigate(R.id.action_loginFragment_to_homeFragment)
                     } else {
                         loadingUI.loadingToBtn()
                         customToast.showCustomToast(resultado.msg, Types.ERROR)

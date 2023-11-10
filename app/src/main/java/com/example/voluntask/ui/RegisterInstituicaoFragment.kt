@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import com.example.voluntask.R
 import com.example.voluntask.databinding.FragmentRegisterInstituicaoBinding
 import com.example.voluntask.models.Instituicao
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
@@ -50,7 +51,7 @@ class RegisterInstituicaoFragment : Fragment() {
             val cpfResp = binding.inputCpfResp.unMasked
             val confirmarSenha = binding.inputConfirmarSenha.text.toString()
             val dataCadastro = Date.from(Instant.now())
-            val descricao = ""
+            val tipoConta = TipoConta.INSTITUICAO
 
             if (
                 nome.isBlank() ||
@@ -67,9 +68,9 @@ class RegisterInstituicaoFragment : Fragment() {
                     .matches()
             ) {
                 customToast.showCustomToast("E-mail inválido",Types.ERROR)
-            } else if (binding.inputSenha.text.toString() != binding.inputConfirmarSenha.text.toString()) {
+            } else if (senha != confirmarSenha) {
                 customToast.showCustomToast("As senhas não conferem",Types.ERROR)
-            } else if (binding.inputSenha.text.toString().length < 6) {
+            } else if (senha.length < 6) {
                 customToast.showCustomToast("Senha menor que 6 caracteres",Types.ERROR)
             } else if (!binding.inputCpfResp.isDone) {
                 customToast.showCustomToast("Cpf inválido",Types.ERROR)
@@ -80,7 +81,7 @@ class RegisterInstituicaoFragment : Fragment() {
             } else {
 
                 val instituicao =
-                    Instituicao(nome, descricao, nomeResp, telefone, cnpj, cpfResp, dataCadastro)
+                    Instituicao(nome, nomeResp, telefone, tipoConta, cnpj, cpfResp, dataCadastro)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

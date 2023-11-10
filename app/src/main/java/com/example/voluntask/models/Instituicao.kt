@@ -11,7 +11,6 @@ import java.util.Date
 @Parcelize
 data class Instituicao(
     override var nome: String,
-    override var descricao: String,
     var nomeRepresentanteLegal: String,
     override var telefone: String,
     override var tipoConta: TipoConta,
@@ -25,7 +24,6 @@ data class Instituicao(
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "nome" to nome,
-            "descricao" to descricao,
             "idUsuario" to idUsuario,
             "telefone" to telefone,
             "tipoConta" to tipoConta,
@@ -40,7 +38,6 @@ data class Instituicao(
         fun DocumentSnapshot.toObject(): Instituicao? {
             try {
                 val nome = getString("nome")!!
-                val descricao = getString("descricao")!!
                 val idUsuario = getString("idUsuario")!!
                 val telefone = getString("telefone")!!
                 val tipoConta = TipoConta.fromValue(getLong("tipoConta")!!)
@@ -51,7 +48,6 @@ data class Instituicao(
 
                 val instituicao = Instituicao(
                     nome = nome,
-                    descricao = descricao,
                     telefone = telefone,
                     cnpj = cnpj,
                     dataCadastro = dataCadastro,

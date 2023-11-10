@@ -11,7 +11,6 @@ import java.util.Date
 @Parcelize
 data class Voluntario(
     override  var nome: String,
-    override var descricao: String,
     override var telefone: String,
     override var dataCadastro: Date,
     override var tipoConta: TipoConta,
@@ -25,7 +24,6 @@ data class Voluntario(
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "nome" to nome,
-            "descricao" to descricao,
             "idUsuario" to idUsuario,
             "telefone" to telefone,
             "tipoConta" to tipoConta,
@@ -50,7 +48,6 @@ data class Voluntario(
                 val genero = Generos.fromValue(getLong("genero")!!)
                 val voluntario = Voluntario(
                     nome = nome,
-                    descricao = descricao,
                     telefone = telefone,
                     cpf = cpf,
                     dataCadastro = dataCadastro,

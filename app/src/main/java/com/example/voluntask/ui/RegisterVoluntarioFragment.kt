@@ -17,6 +17,7 @@ import com.example.voluntask.R
 import com.example.voluntask.databinding.FragmentRegisterVoluntarioBinding
 import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.enums.Generos
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
@@ -77,20 +78,20 @@ class RegisterVoluntarioFragment : Fragment() {
             val email = binding.inputEmail.text.toString()
             val senha = binding.inputSenha.text.toString()
             val nome = binding.inputNome.text.toString()
-            val telefone = binding.inputTelefone
-            val cpf = binding.inputCpf
+            val telefone = binding.inputTelefone.unMasked
+            val cpf = binding.inputCpf.unMasked
             var dataNascimento = binding.inputData.text.toString()
             val confirmarSenha = binding.inputConfirmarSenha.text.toString()
             val genero = Generos.fromValue(binding.inputGenero.listSelection)
             val dataCadastro = Date.from(Instant.now())
-            val descricao = ""
+            val tipoConta = TipoConta.VOLUNTARIO
 
             if (
                 nome.isBlank() ||
                 email.isBlank() ||
-                telefone.text.toString().isBlank() ||
+                telefone.isBlank() ||
                 dataNascimento.isBlank() ||
-                cpf.text.toString().isBlank() ||
+                cpf.isBlank() ||
                 senha.isBlank() ||
                 confirmarSenha.toString().isBlank()
             ) {
@@ -101,16 +102,18 @@ class RegisterVoluntarioFragment : Fragment() {
                 customToast.showCustomToast("E-mail inválido",Types.ERROR)
             } else if (senha != confirmarSenha) {
                 customToast.showCustomToast("As senhas não conferem",Types.ERROR)
-            } else if (!cpf.isDone) {
+            } else if (senha.length < 6) {
+                customToast.showCustomToast("Senha menor que 6 caracteres",Types.ERROR)
+            } else if (!binding.inputCpf.isDone) {
                 customToast.showCustomToast("Cpf inválido",Types.ERROR)
-            } else if (!telefone.isDone) {
+            } else if (!binding.inputTelefone.isDone) {
                 customToast.showCustomToast("Número de telefone inválido",Types.ERROR)
             } else if (idade < 18) {
                 customToast.showCustomToast("Idade menor que 18 anos",Types.ERROR)
             } else {
 
                 val voluntario =
-                    Voluntario(nome, descricao, telefone.unMasked, dataCadastro, valueOf("$ano-$mes-$dia"), cpf.unMasked, genero)
+                    Voluntario(nome, telefone, dataCadastro, tipoConta, valueOf("$ano-$mes-$dia"), cpf, genero)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()
