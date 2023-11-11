@@ -20,7 +20,7 @@ class AuthViewModel : ViewModel() {
 
     fun getUserInfo(idUser: String,callback: (Usuario?) -> Unit){
         viewModelScope.launch {
-            callback(FirebaseService<Usuario>("").getUserInfo(idUser))
+            callback(FirebaseService<Usuario>("Voluntarios").getUserInfo(idUser))
         }
     }
 

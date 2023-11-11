@@ -22,6 +22,8 @@ data class Evento(
     var status:Status
 ): Parcelable, ConvertibleToMap {
 
+    constructor(): this("", "","","", Date(),Date(),Date(),Categorias.CARIDADE,Status.ENCERRADO)
+
     var idEvento:String = ""
 
     override fun toMap(): Map<String, Any?> {

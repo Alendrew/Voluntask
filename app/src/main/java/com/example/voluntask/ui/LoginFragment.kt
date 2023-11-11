@@ -67,8 +67,8 @@ class LoginFragment : Fragment() {
                                 .navigate(R.id.action_loginFragment_to_homeFragment, bundle)
                         }
                     } else {
-                        loadingUI.loadingToBtn()
                         customToast.showCustomToast(resultado.msg, Types.ERROR)
+                        loadingUI.loadingToBtn()
                     }
                 }
             }

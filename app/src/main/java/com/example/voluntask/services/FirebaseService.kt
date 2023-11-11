@@ -1,6 +1,7 @@
 package com.example.voluntask.services
 
 import android.util.Log
+import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Instituicao
 import com.example.voluntask.models.Instituicao.Companion.toObject
 import com.example.voluntask.models.Usuario
@@ -83,18 +84,17 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         return null
     }
 
-    suspend fun getAllItems(item: T): List<T> {
-        val lista: MutableList<T> = mutableListOf()
-        val tipoItem = item::class.java
+    suspend fun getAllEventos(): List<Evento> {
+        val lista: MutableList<Evento> = mutableListOf()
 
         try {
             val doc = itemCollections.get().await()
             for (registro in doc) {
-                val itemConvertido = registro.toObject(tipoItem)
+                val itemConvertido = registro.toObject(Evento::class.java)
                 lista.add(itemConvertido)
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching: $e")
+            Log.e(TAG, "Error fetching eventos: $e")
         }
 
         return lista

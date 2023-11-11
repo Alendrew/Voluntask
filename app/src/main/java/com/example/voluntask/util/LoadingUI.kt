@@ -11,13 +11,13 @@ class LoadingUI(
     fun loadingToBtn(){
         btn.visibility = View.VISIBLE
         loading.visibility = View.GONE
-        Hide(additionalItems)
+        Show(additionalItems)
     }
 
     fun btnToLoading(){
         btn.visibility = View.GONE
         loading.visibility = View.VISIBLE
-        Show(additionalItems)
+        Hide(additionalItems)
     }
 
     companion object {

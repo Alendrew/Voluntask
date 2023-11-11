@@ -33,7 +33,7 @@ class EventoAdapter(private val onItemClicked: (Evento) -> Unit) : Adapter<Recyc
 
     }
 
-    fun setVideoList(items : List<Evento>) {
+    fun setEventoList(items : List<Evento>) {
         this.items = items.toMutableList()
         notifyDataSetChanged()
     }
@@ -43,16 +43,16 @@ class EventoAdapter(private val onItemClicked: (Evento) -> Unit) : Adapter<Recyc
     ):RecyclerView.ViewHolder(itemView){
         private val binding: ResItemEventoBinding = ResItemEventoBinding.bind(itemView)
 
-        fun bind(Evento: Evento, onItemClicked: (Evento) -> Unit){
-            binding.name.text = Evento.nome
-            binding.descricao.text = Evento.descricao
+        fun bind(evento: Evento, onItemClicked: (Evento) -> Unit){
+            binding.name.text = evento.nome
+            binding.descricao.text = evento.descricao
 
             val requestOptions = RequestOptions()
                 .placeholder(R.drawable.baseline_auto_awesome_24)
                 .error(R.drawable.baseline_error_24)
 
             itemView.setOnClickListener{
-                onItemClicked(Evento)
+                onItemClicked(evento)
             }
 
         }
