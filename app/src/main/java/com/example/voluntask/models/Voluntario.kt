@@ -14,12 +14,11 @@ data class Voluntario(
     override var telefone: String,
     override var dataCadastro: Date,
     override var tipoConta: TipoConta,
+    override var idUsuario: String,
     var dataNascimento: Date,
     var cpf: String,
     var genero: Generos
 ): Usuario(),Parcelable {
-
-    override var idUsuario = ""
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -53,9 +52,9 @@ data class Voluntario(
                     dataCadastro = dataCadastro,
                     dataNascimento = dataNascimento,
                     tipoConta = tipoConta,
+                    idUsuario = idUsuario,
                     genero = genero
                 )
-                voluntario.idUsuario = idUsuario
                 return voluntario
             } catch (e: Exception) {
                 Log.e(TAG, "Error converting voluntario", e)

@@ -15,11 +15,10 @@ data class Instituicao(
     override var telefone: String,
     override var tipoConta: TipoConta,
     var cnpj: String,
+    override var idUsuario: String,
     var cpfRepresentanteLegal: String,
     override var dataCadastro: Date,
 ): Usuario(), Parcelable {
-
-    override var idUsuario = ""
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -53,9 +52,9 @@ data class Instituicao(
                     dataCadastro = dataCadastro,
                     tipoConta = tipoConta,
                     cpfRepresentanteLegal = cpfRepresentanteLegal,
+                    idUsuario = idUsuario,
                     nomeRepresentanteLegal = nomeRepresentanteLegal
                 )
-                instituicao.idUsuario = idUsuario
                 return instituicao
             } catch (e: Exception) {
                 Log.e(TAG, "Error converting instituicao", e)

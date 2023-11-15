@@ -54,20 +54,18 @@
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_gravity="center">
-        
-        <androidx.cardview.widget.CardView
+
+        <SearchView
+            android:id="@+id/searchView"
             android:layout_width="300dp"
+            android:queryHint="Nome do evento"
             android:layout_height="50dp"
             android:layout_gravity="start|center"
-            android:backgroundTint="#E3E3E3"
-            app:cardCornerRadius="24dp">
-
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.cardview.widget.CardView>
+            android:foreground="?android:attr/selectableItemBackground"
+            android:background="@drawable/custom_border"
+            android:backgroundTint="#E3E3E3"/>
         <ImageView
+            android:id="@+id/filterDialog"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="end|center"
