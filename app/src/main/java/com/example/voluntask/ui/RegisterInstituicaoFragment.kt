@@ -81,7 +81,7 @@ class RegisterInstituicaoFragment : Fragment() {
             } else {
 
                 val instituicao =
-                    Instituicao(nome, nomeResp, telefone, tipoConta, cnpj, cpfResp, dataCadastro)
+                    Instituicao(nome, nomeResp, telefone, tipoConta, cnpj, "", cpfResp, dataCadastro)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

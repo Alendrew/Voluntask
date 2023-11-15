@@ -3,7 +3,6 @@ package com.example.voluntask.models
 import android.os.Parcelable
 import android.util.Log
 import com.example.voluntask.models.enums.TipoConta
-import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.parcelize.Parcelize
 import java.util.Date
@@ -45,7 +44,7 @@ data class Instituicao(
                 val cpfRepresentanteLegal = getString("cpfRepresentanteLegal")!!
                 val nomeRepresentanteLegal = getString("nomeRepresentanteLegal")!!
 
-                val instituicao = Instituicao(
+                return Instituicao(
                     nome = nome,
                     telefone = telefone,
                     cnpj = cnpj,
@@ -55,7 +54,6 @@ data class Instituicao(
                     idUsuario = idUsuario,
                     nomeRepresentanteLegal = nomeRepresentanteLegal
                 )
-                return instituicao
             } catch (e: Exception) {
                 Log.e(TAG, "Error converting instituicao", e)
                 return null

@@ -49,6 +49,7 @@ class RegisterVoluntarioFragment : Fragment() {
         val items = listOf("Masculino", "Feminino", "Prefiro não dizer")
         val adapter = ArrayAdapter(requireContext(), R.layout.list_item, items)
         var ano = ""; var mes = ""; var dia = ""; var idade = 0
+        var genero: Generos = Generos.PREFIRO_NAO_DIZER
         var loadingUI: LoadingUI
         (binding.inputGeneroLayout.editText as? AutoCompleteTextView)?.setAdapter(adapter)
         binding.inputData.setOnClickListener(View.OnClickListener { // calender class's instance and get current date , month and year from calender
@@ -74,15 +75,19 @@ class RegisterVoluntarioFragment : Fragment() {
             }?.show()
         })
 
+        binding.inputGenero.setOnItemClickListener { _, _, position, _ ->
+            val selectedItem = adapter.getItem(position)
+            genero = Generos.fromValue(position)
+        }
+
         binding.btnRegister.setOnClickListener {
             val email = binding.inputEmail.text.toString()
             val senha = binding.inputSenha.text.toString()
             val nome = binding.inputNome.text.toString()
             val telefone = binding.inputTelefone.unMasked
             val cpf = binding.inputCpf.unMasked
-            var dataNascimento = binding.inputData.text.toString()
+            val dataNascimento = binding.inputData.text.toString()
             val confirmarSenha = binding.inputConfirmarSenha.text.toString()
-            val genero = Generos.fromValue(binding.inputGenero.listSelection)
             val dataCadastro = Date.from(Instant.now())
             val tipoConta = TipoConta.VOLUNTARIO
 
@@ -113,7 +118,7 @@ class RegisterVoluntarioFragment : Fragment() {
             } else {
 
                 val voluntario =
-                    Voluntario(nome, telefone, dataCadastro, tipoConta, valueOf("$ano-$mes-$dia"), cpf, genero)
+                    Voluntario(nome, telefone, dataCadastro, tipoConta, "", valueOf("$ano-$mes-$dia"), cpf, genero)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

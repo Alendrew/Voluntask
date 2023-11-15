@@ -1,6 +1,6 @@
 package com.example.voluntask.models.enums
 
-enum class TipoConta(i: Number) {
+enum class TipoConta(val i: Number) {
     VOLUNTARIO(0),
     INSTITUICAO(1);
 

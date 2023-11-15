@@ -29,37 +29,35 @@ data class Voluntario(
             "cpf" to cpf,
             "dataCadastro" to dataCadastro,
             "dataNascimento" to dataNascimento,
-            "genero" to genero
+            "genero" to genero.i
         )
     }
 
     companion object {
          fun DocumentSnapshot.toObject(): Voluntario? {
-            try {
-                val nome = getString("nome")!!
-                val descricao = getString("descricao")!!
-                val idUsuario = getString("idUsuario")!!
-                val telefone = getString("telefone")!!
-                val cpf = getString("cpf")!!
-                val tipoConta = TipoConta.fromValue(getLong("tipoConta")!!)
-                val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
-                val dataNascimento = getTimestamp("dataNascimento")!!.toDate()
-                val genero = Generos.fromValue(getLong("genero")!!)
-                val voluntario = Voluntario(
-                    nome = nome,
-                    telefone = telefone,
-                    cpf = cpf,
-                    dataCadastro = dataCadastro,
-                    dataNascimento = dataNascimento,
-                    tipoConta = tipoConta,
-                    idUsuario = idUsuario,
-                    genero = genero
-                )
-                return voluntario
-            } catch (e: Exception) {
-                Log.e(TAG, "Error converting voluntario", e)
-                return null
-            }
+             try {
+                 val nome = getString("nome")!!
+                 val idUsuario = getString("idUsuario")!!
+                 val telefone = getString("telefone")!!
+                 val cpf = getString("cpf")!!
+                 val tipoConta = TipoConta.fromValue(getLong("tipoConta")!!)
+                 val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
+                 val dataNascimento = getTimestamp("dataNascimento")!!.toDate()
+                 val genero = Generos.fromValue(getLong("genero")!!)
+                 return Voluntario(
+                     nome = nome,
+                     telefone = telefone,
+                     cpf = cpf,
+                     dataCadastro = dataCadastro,
+                     dataNascimento = dataNascimento,
+                     tipoConta = tipoConta,
+                     idUsuario = idUsuario,
+                     genero = genero
+                 )
+             } catch (e: Exception) {
+                 Log.e(TAG, "Error converting voluntario", e)
+                 return null
+             }
         }
 
         private const val TAG = "Voluntario"

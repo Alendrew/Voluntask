@@ -1,6 +1,6 @@
 package com.example.voluntask.models.enums
 
-enum class Status(i: Number) {
+enum class Status(val i: Number) {
     ATIVO(0),
     ENCERRADO(1);
 
