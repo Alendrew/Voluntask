@@ -20,4 +20,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="fake_event">Endereço: Rua mauro caneca 255 - SP\nDescrição: É uma iniciativa voltada para a distribuição regular de alimentos nutritivos e refeições quentes para moradores de rua\nData Inicio: 07/11/2023 12:00\nData fim: 11/11/2023 12:00\nCategoria: Doação de alimentos\nStatus: Ativo</string>
+    <string name="voluntario_text">Gostaria de me cadastrar como voluntário para participar dos eventos promovidos pelas instituições através do aplicativo Voluntask</string>
+    <string name="instituicao_text">Tenho interesse em registrar minha instituição no aplicativo Voluntask para atrair novos voluntários e organizar eventos.</string>
 </resources>

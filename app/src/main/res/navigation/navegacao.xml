@@ -70,4 +70,19 @@
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
+    <fragment
+        android:id="@+id/EventoFragment"
+        android:name="com.example.voluntask.ui.EventoFragment"
+        android:label="fragment_evento"
+        tools:layout="@layout/fragment_evento" />
+    <fragment
+        android:id="@+id/confirmarExcluirFragment"
+        android:name="com.example.voluntask.ui.ConfirmarExcluirFragment"
+        android:label="fragment_confirmar_excluir"
+        tools:layout="@layout/fragment_confirmar_excluir" />
+    <fragment
+        android:id="@+id/inscricaoFragment"
+        android:name="com.example.voluntask.ui.InscricaoFragment"
+        android:label="fragment_inscricao"
+        tools:layout="@layout/fragment_inscricao" />
 </navigation>

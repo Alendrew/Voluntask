@@ -100,7 +100,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/lorem_ipsum" />
+                    android:text="@string/voluntario_text" />
             </LinearLayout>
         </LinearLayout>
 
@@ -149,7 +149,7 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="@string/lorem_ipsum" />
+                    android:text="@string/instituicao_text" />
             </LinearLayout>
         </LinearLayout>
 </LinearLayout>

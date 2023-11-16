@@ -87,6 +87,7 @@ class RegisterInstituicaoFragment : Fragment() {
                 loadingUI.btnToLoading()
                 viewModel.register(instituicao, email, senha) {
                     if (it.result) {
+                        customToast.showCustomToast(it.msg, Types.SUCESS)
                         val delayMillis = 2000L // 2 segundos
 
                         // Use um Handler para ocultar a Toast após o atraso
