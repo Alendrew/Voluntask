@@ -42,7 +42,7 @@ class HomeFragment : Fragment() {
         binding.searchView.isIconified = false;
         binding.searchView.isIconifiedByDefault = false
         val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        val userInfo = arguments?.getParcelable<Usuario>("userInfo")
+        val userInfo = arguments?.getParcelable<Usuario>("usuario")
         viewModel.userInfo = userInfo
         val adapter = EventoAdapter {
 //            openLink(it.link)
@@ -58,9 +58,9 @@ class HomeFragment : Fragment() {
             // Inflar o layout personalizado
             val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null)
 
-//            if (viewModel.userInfo!!.tipoConta != TipoConta.VOLUNTARIO){
-//                dialogView.findViewById<FrameLayout>(R.id.layoutMeus).visibility = View.GONE
-//            }
+            if (viewModel.userInfo!!.tipoConta != TipoConta.VOLUNTARIO){
+                dialogView.findViewById<FrameLayout>(R.id.layoutMeus).visibility = View.GONE
+            }
 
             // Configurar o Spinner com opções
             var ano = ""; var mes = ""; var dia = ""; var idade = 0

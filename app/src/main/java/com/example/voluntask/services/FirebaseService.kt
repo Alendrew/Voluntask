@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
@@ -62,22 +63,21 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
     suspend fun getUserInfo(idUser: String): Usuario? {
         val voluntariosCollection = db.collection("Voluntarios")
         val instituicaoCollection = db.collection("Instituicoes")
-        var userInfo: DocumentSnapshot
+        var userInfo: QuerySnapshot
         try {
-            userInfo = voluntariosCollection.document(idUser).get().await()
-            if (!userInfo.exists()) {
-                userInfo = instituicaoCollection.document(idUser).get().await()
+            userInfo = voluntariosCollection.whereEqualTo("idUsuario", idUser).get().await()
+            if (userInfo.isEmpty) {
+                userInfo = instituicaoCollection.whereEqualTo("idUsuario", idUser).get().await()
             }
 
-            if (userInfo.exists()) {
-                val tipoConta = userInfo.get("tipoConta") as Int
+            val tipoConta = userInfo.documents[0].getString("tipoConta")
 
-                return if (tipoConta == 0) {
-                    userInfo.toObject(Voluntario::class.java)
-                } else {
-                    userInfo.toObject(Instituicao::class.java)
-                }
+            return if (tipoConta == "VOLUNTARIO") {
+                userInfo.documents[0].toObject(Voluntario::class.java)
+            } else {
+                userInfo.documents[0].toObject(Instituicao::class.java)
             }
+
         } catch (e: Exception) {
             Log.e(TAG,"Error getting user info", e)
         }

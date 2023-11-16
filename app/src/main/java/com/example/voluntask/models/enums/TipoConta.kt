@@ -1,14 +1,14 @@
 package com.example.voluntask.models.enums
 
-enum class TipoConta(val i: Number) {
-    VOLUNTARIO(0),
-    INSTITUICAO(1);
+enum class TipoConta(val i: String) {
+    VOLUNTARIO("VOLUNTARIO"),
+    INSTITUICAO("INSTITUICAO");
 
     companion object {
-        fun fromValue(value: Number): TipoConta {
+        fun fromValue(value: String): TipoConta {
             return when (value) {
-                0 -> VOLUNTARIO
-                1 -> INSTITUICAO
+                "VOLUNTARIO" -> VOLUNTARIO
+                "INSTITUICAO" -> INSTITUICAO
                 else -> VOLUNTARIO
             }
         }

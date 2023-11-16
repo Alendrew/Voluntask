@@ -19,12 +19,14 @@ data class Instituicao(
     override var dataCadastro: Date,
 ): Usuario(), Parcelable {
 
+    constructor(): this("","","",TipoConta.INSTITUICAO,"","","",Date())
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "nome" to nome,
             "idUsuario" to idUsuario,
             "telefone" to telefone,
-            "tipoConta" to tipoConta,
+            "tipoConta" to tipoConta.i,
             "cnpj" to cnpj,
             "dataCadastro" to dataCadastro,
             "cpfRepresentanteLegal" to cpfRepresentanteLegal,
@@ -38,7 +40,7 @@ data class Instituicao(
                 val nome = getString("nome")!!
                 val idUsuario = getString("idUsuario")!!
                 val telefone = getString("telefone")!!
-                val tipoConta = TipoConta.fromValue(getLong("tipoConta")!!)
+                val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
                 val cnpj = getString("cnpj")!!
                 val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
                 val cpfRepresentanteLegal = getString("cpfRepresentanteLegal")!!

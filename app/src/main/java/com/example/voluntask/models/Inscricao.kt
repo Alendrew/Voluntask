@@ -14,6 +14,8 @@ data class Inscricao(
     var dataInscricao:Date
 ): Parcelable, ConvertibleToMap {
 
+    constructor(): this("","",Date())
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "idEvento" to idEvento,

@@ -1,14 +1,14 @@
 package com.example.voluntask.models.enums
 
-enum class Status(val i: Number) {
-    ATIVO(0),
-    ENCERRADO(1);
+enum class Status(val i: String) {
+    ATIVO("ATIVO"),
+    ENCERRADO("ENCERRADO");
 
     companion object {
-        fun fromValue(value: Number): Status {
+        fun fromValue(value: String): Status {
             return when (value) {
-                0 -> ATIVO
-                1 -> ENCERRADO
+                "ATIVO" -> ATIVO
+                "ENCERRADO" -> ENCERRADO
                 else -> ATIVO
             }
         }

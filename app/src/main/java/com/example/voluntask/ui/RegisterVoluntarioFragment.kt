@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.voluntask.R
 import com.example.voluntask.databinding.FragmentRegisterVoluntarioBinding
+import com.example.voluntask.models.Instituicao
 import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.enums.Generos
 import com.example.voluntask.models.enums.TipoConta
@@ -76,8 +77,13 @@ class RegisterVoluntarioFragment : Fragment() {
         })
 
         binding.inputGenero.setOnItemClickListener { _, _, position, _ ->
-            val selectedItem = adapter.getItem(position)
-            genero = Generos.fromValue(position)
+            val selectedItem = when (position) {
+                0 -> "MASCULINO"
+                1 -> "FEMININO"
+                2 -> "PREFIRO_NAO_DIZER"
+                else -> ""
+            }
+            genero = Generos.fromValue(selectedItem)
         }
 
         binding.btnRegister.setOnClickListener {

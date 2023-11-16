@@ -52,8 +52,8 @@ data class Evento(
                 val dataHoraInicio = getTimestamp("dataHoraInicio")!!.toDate()
                 val dataHoraFim = getTimestamp("dataHoraFim")!!.toDate()
                 val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
-                val categoria = Categorias.fromValue(getLong("categoria")!!)
-                val status = Status.fromValue(getLong("status")!!)
+                val categoria = Categorias.fromValue(getString("categoria")!!)
+                val status = Status.fromValue(getString("status")!!)
 
                 val evento = Evento(
                     nome = nome,

@@ -20,12 +20,14 @@ data class Voluntario(
     var genero: Generos
 ): Usuario(),Parcelable {
 
+    constructor(): this("","",Date(),TipoConta.VOLUNTARIO,"",Date(),"",Generos.PREFIRO_NAO_DIZER)
+
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "nome" to nome,
             "idUsuario" to idUsuario,
             "telefone" to telefone,
-            "tipoConta" to tipoConta,
+            "tipoConta" to tipoConta.i,
             "cpf" to cpf,
             "dataCadastro" to dataCadastro,
             "dataNascimento" to dataNascimento,
@@ -40,10 +42,10 @@ data class Voluntario(
                  val idUsuario = getString("idUsuario")!!
                  val telefone = getString("telefone")!!
                  val cpf = getString("cpf")!!
-                 val tipoConta = TipoConta.fromValue(getLong("tipoConta")!!)
+                 val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
                  val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
                  val dataNascimento = getTimestamp("dataNascimento")!!.toDate()
-                 val genero = Generos.fromValue(getLong("genero")!!)
+                 val genero = Generos.fromValue(getString("genero")!!)
                  return Voluntario(
                      nome = nome,
                      telefone = telefone,

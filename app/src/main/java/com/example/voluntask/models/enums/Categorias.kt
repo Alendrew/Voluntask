@@ -1,16 +1,16 @@
 package com.example.voluntask.models.enums
 
-enum class Categorias(val i: Number) {
-    DOACAO(0),
-    LIMPEZA(1),
-    CARIDADE(2);
+enum class Categorias(val i: String) {
+    DOACAO("DOACAO"),
+    LIMPEZA("LIMPEZA"),
+    CARIDADE("CARIDADE");
 
     companion object {
-        fun fromValue(value: Number): Categorias {
+        fun fromValue(value: String): Categorias {
             return when (value) {
-                0 -> Categorias.DOACAO
-                1 -> Categorias.LIMPEZA
-                2 -> Categorias.CARIDADE
+                "DOACAO" -> Categorias.DOACAO
+                "LIMPEZA" -> Categorias.LIMPEZA
+                "CARIDADE" -> Categorias.CARIDADE
                 else -> Categorias.DOACAO
             }
         }
