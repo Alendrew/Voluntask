@@ -1,7 +1,6 @@
 package com.example.voluntask.ui
 
 import android.app.DatePickerDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
-import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,16 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.voluntask.R
 import com.example.voluntask.adapters.EventoAdapter
 import com.example.voluntask.databinding.FragmentHomeBinding
-import com.example.voluntask.databinding.FragmentLoginBinding
 import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
-import com.example.voluntask.models.enums.Generos
 import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.viewmodels.HomeViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.sql.Date
+import java.time.Instant
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
@@ -62,8 +59,22 @@ class HomeFragment : Fragment() {
             adapter.setEventoList(eventos)
         }
 
+        var selectedCategoriaPosition: Int = -1
+        var selectedStatusPosition: Int = -1
+
+
+        var anoS = ""
+        var mesS = ""
+        var diaS = ""
+        var anoE = ""
+        var mesE = ""
+        var diaE = ""
+        var selectedDateStart: Date? = null
+        var selectedDateEnd: Date? = null
+        var selectedCategoria: Categorias? = null
+        var selectedStatus: Status? = null
+
         binding.filterDialog.setOnClickListener {
-            // Inflar o layout personalizado
             val dialogView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null)
 
@@ -71,13 +82,6 @@ class HomeFragment : Fragment() {
                 dialogView.findViewById<FrameLayout>(R.id.layoutMeus).visibility = View.GONE
             }
 
-            // Configurar o Spinner com opções
-            var anoS = "";
-            var mesS = "";
-            var diaS = ""
-            var anoE = "";
-            var mesE = "";
-            var diaE = ""
             val spinnerCategoria =
                 dialogView.findViewById<AutoCompleteTextView>(R.id.filterCategoria)
             val spinnerStatus = dialogView.findViewById<AutoCompleteTextView>(R.id.filterStatus)
@@ -126,7 +130,7 @@ class HomeFragment : Fragment() {
                             mesE = "%02d".format(monthOfYear + 1)
                             diaE = "%02d".format(dayOfMonth)
                             val date = "$diaE/$mesE/$anoE"
-                            dataPickerStart.setText(date)
+                            dataPickerEnd.setText(date)
                         },
                         mYear,
                         mMonth,
@@ -136,16 +140,32 @@ class HomeFragment : Fragment() {
             })
 
 
-            var selectedDateStart: Date? = null
-            var selectedDateEnd: Date? = null
-            var selectedCategoria: Categorias? = null
-            var selectedStatus: Status? = null
-
             if (anoS != "") {
                 selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
             }
             if (anoE != "") {
                 selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
+            }
+
+            if (selectedDateStart != null) {
+                val calendar = Calendar.getInstance()
+                calendar.time = selectedDateStart!!
+                dataPickerStart.setText("${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${"%02d".format(calendar.get(Calendar.MONTH) + 1)}/${calendar.get(Calendar.YEAR)}")
+            }
+
+            if (selectedDateEnd != null) {
+                val calendar = Calendar.getInstance()
+                calendar.time = selectedDateEnd!!
+                dataPickerEnd.setText("${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${"%02d".format(calendar.get(Calendar.MONTH) + 1)}/${calendar.get(Calendar.YEAR)}")
+            }
+
+
+            if (selectedCategoriaPosition != -1) {
+                spinnerCategoria.setText(spinnerCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false);
+            }
+
+            if (selectedStatusPosition != -1) {
+                spinnerStatus.setText(spinnerStatus.adapter.getItem(selectedStatusPosition).toString(), false);
             }
 
             spinnerCategoria.setOnItemClickListener { _, _, position, _ ->
@@ -158,6 +178,7 @@ class HomeFragment : Fragment() {
 
                 if (selectedItem != null){
                     selectedCategoria = Categorias.fromValue(selectedItem)
+                    selectedCategoriaPosition = position
                 }
             }
 
@@ -170,15 +191,15 @@ class HomeFragment : Fragment() {
 
                 if (selectedItem != null){
                     selectedStatus = Status.fromValue(selectedItem)
+                    selectedStatusPosition = position
                 }
             }
-
 
             // Criar o AlertDialog
             val alertDialog = AlertDialog.Builder(requireContext())
                 .setTitle("Filtrar")
                 .setView(dialogView)
-                .setPositiveButton("Aplicar") { dialog, _ ->
+                .setPositiveButton("Aplicar") { _, _ ->
                     // Obter valores selecionados
                     var filteredList: List<Evento>
                     viewModel.getAllEventos { eventos ->
@@ -193,6 +214,22 @@ class HomeFragment : Fragment() {
                 }
                 .setNegativeButton("Cancelar", null)
                 .setNeutralButton("Limpar") { _, _ ->
+                    anoS = ""
+                    mesS = ""
+                    diaS = ""
+                    anoE = ""
+                    mesE = ""
+                    diaE = ""
+                    selectedDateStart = null
+                    selectedDateEnd = null
+                    selectedCategoria = null
+                    selectedStatus = null
+                    selectedCategoriaPosition = -1
+                    spinnerCategoria.dismissDropDown()
+                    spinnerStatus.dismissDropDown()
+                    selectedStatusPosition = -1
+                    dataPickerStart.setText("")
+                    dataPickerEnd.setText("")
                     viewModel.getAllEventos { eventos ->
                         adapter.setEventoList(eventos)
                     }
