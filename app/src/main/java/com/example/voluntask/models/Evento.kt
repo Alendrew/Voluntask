@@ -15,8 +15,8 @@ data class Evento(
     var localizacao:String,
     var descricao:String,
     var idInstituicao:String,
-    var dataHoraInicio:Date,
-    var dataHoraFim: Date,
+    var dataInicio:Date,
+    var dataFim: Date,
     var dataCadastro:Date,
     var categoria:Categorias,
     var status:Status
@@ -33,8 +33,8 @@ data class Evento(
             "descricao" to descricao,
             "idInstituicao" to idInstituicao,
             "idEvento" to idEvento,
-            "dataHoraInicio" to dataHoraInicio,
-            "dataHoraFim"  to dataHoraFim,
+            "dataHoraInicio" to dataInicio,
+            "dataHoraFim"  to dataFim,
             "dataCadastro" to dataCadastro,
             "categoria" to categoria,
             "status" to status
@@ -60,8 +60,8 @@ data class Evento(
                     localizacao = localizacao,
                     descricao = descricao,
                     idInstituicao = idInstituicao,
-                    dataHoraInicio = dataHoraInicio,
-                    dataHoraFim = dataHoraFim,
+                    dataInicio = dataHoraInicio,
+                    dataFim = dataHoraFim,
                     dataCadastro = dataCadastro,
                     categoria = categoria,
                     status = status

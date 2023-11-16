@@ -3,6 +3,7 @@ package com.example.voluntask.ui
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -135,59 +136,60 @@ class HomeFragment : Fragment() {
             })
 
 
+            var selectedDateStart: Date? = null
+            var selectedDateEnd: Date? = null
+            var selectedCategoria: Categorias? = null
+            var selectedStatus: Status? = null
+
+            if (anoS != "") {
+                selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
+            }
+            if (anoE != "") {
+                selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
+            }
+
+            spinnerCategoria.setOnItemClickListener { _, _, position, _ ->
+                val selectedItem = when (position) {
+                    0 -> "DOACAO"
+                    1 -> "LIMPEZA"
+                    2 -> "CARIDADE"
+                    else -> null
+                }
+
+                if (selectedItem != null){
+                    selectedCategoria = Categorias.fromValue(selectedItem)
+                }
+            }
+
+            spinnerStatus.setOnItemClickListener { _, _, position, _ ->
+                val selectedItem = when (position) {
+                    0 -> "ATIVO"
+                    1 -> "ENCERRADO"
+                    else -> null
+                }
+
+                if (selectedItem != null){
+                    selectedStatus = Status.fromValue(selectedItem)
+                }
+            }
+
+
             // Criar o AlertDialog
             val alertDialog = AlertDialog.Builder(requireContext())
                 .setTitle("Filtrar")
                 .setView(dialogView)
                 .setPositiveButton("Aplicar") { dialog, _ ->
                     // Obter valores selecionados
-                    val selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
-                    val selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
-                    val filteredEventos = mutableListOf<Evento>()
+                    var filteredList: List<Evento>
                     viewModel.getAllEventos { eventos ->
-                        var selectedCategoria: Categorias? = null
-                        var selectedStatus: Status? = null
-
-                        // Filtre os eventos com base nos critérios selecionados
-                        eventos.filterTo(filteredEventos) { evento ->
-                            spinnerCategoria.setOnItemClickListener { _, _, position, _ ->
-                                val selectedItem = when (position) {
-                                    0 -> "DOACAO"
-                                    1 -> "LIMPEZA"
-                                    2 -> "CARIDADE"
-                                    else -> null
-                                }
-
-                                if (selectedItem != null) {
-                                    selectedCategoria = Categorias.fromValue(selectedItem)
-                                } else {
-                                    selectedCategoria = null
-                                }
-                            }
-
-                            spinnerStatus.setOnItemClickListener { _, _, position, _ ->
-                                val selectedItem = when (position) {
-                                    0 -> "ATIVO"
-                                    1 -> "ENCERRADO"
-                                    else -> null
-                                }
-
-                                if (selectedItem != null) {
-                                    selectedStatus = Status.fromValue(selectedItem)
-                                } else {
-                                    selectedStatus = null
-                                }
-                            }
-
-                            (selectedCategoria == null || evento.categoria == selectedCategoria) &&
-                            (selectedStatus == null || evento.status == selectedStatus) &&
-                            (selectedDateStart == null || evento.dataHoraInicio == selectedDateStart) &&
-                            (selectedDateEnd == null || evento.dataHoraFim == selectedDateEnd)
+                        filteredList = eventos.filter {
+                            selectedCategoria == null || it.categoria == selectedCategoria &&
+                            selectedStatus == null || it.status == selectedStatus &&
+                            selectedDateStart == null || it.dataInicio == selectedDateStart &&
+                            selectedDateEnd == null || it.dataFim == selectedDateEnd
                         }
+                        adapter.setEventoList(filteredList)
                     }
-
-                    // Atualizar o RecyclerView com os eventos filtrados
-                    adapter.setEventoList(filteredEventos)
                 }
                 .setNegativeButton("Cancelar", null)
                 .setNeutralButton("Limpar") { _, _ ->
