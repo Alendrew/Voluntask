@@ -36,6 +36,10 @@
             android:id="@+id/action_homeFragment_to_EventoFragment"
             app:destination="@id/EventoFragment"
             app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_home2Fragment"
+            app:destination="@id/home2Fragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/registerVoluntarioFragment"
@@ -79,7 +83,11 @@
         android:id="@+id/EventoFragment"
         android:name="com.example.voluntask.ui.EventoFragment"
         android:label="fragment_evento"
-        tools:layout="@layout/fragment_evento" />
+        tools:layout="@layout/fragment_evento" >
+        <action
+            android:id="@+id/action_EventoFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/confirmarExcluirFragment"
         android:name="com.example.voluntask.ui.ConfirmarExcluirFragment"
@@ -90,4 +98,14 @@
         android:name="com.example.voluntask.ui.InscricaoFragment"
         android:label="fragment_inscricao"
         tools:layout="@layout/fragment_inscricao" />
+    <fragment
+        android:id="@+id/home2Fragment"
+        android:name="com.example.voluntask.ui.Home2Fragment"
+        android:label="fragment_home2"
+        tools:layout="@layout/fragment_home2" >
+        <action
+            android:id="@+id/action_home2Fragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/fade_in" />
+    </fragment>
 </navigation>

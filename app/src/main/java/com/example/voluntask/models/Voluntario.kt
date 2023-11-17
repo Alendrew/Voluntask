@@ -27,11 +27,11 @@ data class Voluntario(
             "nome" to nome,
             "idUsuario" to idUsuario,
             "telefone" to telefone,
-            "tipoConta" to tipoConta.i,
+            "tipoConta" to tipoConta,
             "cpf" to cpf,
             "dataCadastro" to dataCadastro,
             "dataNascimento" to dataNascimento,
-            "genero" to genero.i
+            "genero" to genero
         )
     }
 

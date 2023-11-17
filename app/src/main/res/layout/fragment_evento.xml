@@ -19,29 +19,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#BABBFF">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="start|center"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/user" />
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="end"
-                android:src="@drawable/simple_logo" />
-        </FrameLayout>
-
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="30dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -166,7 +147,7 @@
 
         <Space
             android:layout_width="271dp"
-            android:layout_height="10dp"
+            android:layout_height="20dp"
             android:layout_gravity="center" />
 
         <LinearLayout
@@ -194,7 +175,7 @@
 
         <Space
             android:layout_width="271dp"
-            android:layout_height="10dp"
+            android:layout_height="15dp"
             android:layout_gravity="center" />
 
         <TextView
@@ -221,7 +202,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.135"
         tools:drawableLeft="@drawable/baseline_error_24"
         tools:drawableRight="@drawable/baseline_error_24"
         tools:drawableTint="#E40000"

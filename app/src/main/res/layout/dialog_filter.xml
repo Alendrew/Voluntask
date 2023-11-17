@@ -98,25 +98,4 @@
             android:textStyle="bold"
             android:textSize="14sp" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <FrameLayout
-        android:id="@+id/layoutMeus"
-        android:layout_width="271dp"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_gravity="center"
-        android:layout_height="60dp">
-
-        <TextView
-            android:layout_gravity="start|center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="Eventos participados?"/>
-        <CheckBox
-            android:id="@+id/checkboxMeus"
-            android:layout_gravity="end|center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-    </FrameLayout>
 </LinearLayout>

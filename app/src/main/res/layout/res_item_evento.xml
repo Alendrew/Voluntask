@@ -48,17 +48,6 @@
                     android:ellipsize="end"
                     android:textSize="15sp" />
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:src="@drawable/baseline_navigate_next_24"
-                android:layout_gravity="end|center"
-                />
-
         </FrameLayout>
-
-
     </androidx.cardview.widget.CardView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

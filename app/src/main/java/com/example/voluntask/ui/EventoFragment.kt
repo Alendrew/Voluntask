@@ -17,10 +17,12 @@ import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
 import com.example.voluntask.viewmodels.EventoViewModel
+import com.example.voluntask.viewmodels.SharedViewModel
 import java.sql.Date.valueOf
 import java.time.Instant
 import java.util.Calendar
@@ -30,6 +32,7 @@ class EventoFragment : Fragment() {
 
 
     private lateinit var binding: FragmentEventoBinding
+    private lateinit var sharedViewModel: SharedViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -42,8 +45,7 @@ class EventoFragment : Fragment() {
     ): View {
         binding = FragmentEventoBinding.inflate(inflater, container, false)
         val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
-        val userInfo = arguments?.getParcelable<Usuario>("usuario")
-        viewModel.userInfo = userInfo
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         var anoS = ""
         var mesS = ""
@@ -136,6 +138,12 @@ class EventoFragment : Fragment() {
                 customToast.showCustomToast("Todos os campos precisam ser preenchidos", Types.WARNING)
             } else {
 
+                var userInfo: Usuario? = null
+
+                sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                    userInfo = usuario
+                }
+
                 val evento =
                     Evento(nome, localizacao, descricao, userInfo!!.idUsuario, valueOf("$anoS-$mesS-$diaS"), valueOf("$anoE-$mesE-$diaE"), dataCadastro, categoria, Status.ATIVO)
 
@@ -149,7 +157,7 @@ class EventoFragment : Fragment() {
                         // Use um Handler para ocultar a Toast após o atraso
                         Handler(Looper.getMainLooper()).postDelayed({
                             Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_registerVoluntarioFragment_to_loginFragment)
+                                .navigate(R.id.action_EventoFragment_to_homeFragment)
                         }, delayMillis)
                     } else {
                         // O registro não foi bem-sucedido

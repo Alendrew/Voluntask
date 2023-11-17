@@ -8,7 +8,6 @@ import com.example.voluntask.services.FirebaseService
 import kotlinx.coroutines.launch
 
 class EventoViewModel: ViewModel() {
-    var userInfo: Usuario? = null
 
     fun createEvento(evento: Evento, callback: (Boolean) -> Unit) {
         viewModelScope.launch {

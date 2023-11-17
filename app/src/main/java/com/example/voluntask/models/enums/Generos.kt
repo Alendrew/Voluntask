@@ -1,9 +1,9 @@
 package com.example.voluntask.models.enums
 
 enum class Generos(val i: String) {
-    MASCULINO("Masculino"),
-    FEMININO("Feminino"),
-    PREFIRO_NAO_DIZER("Prefiro não dizer");
+    MASCULINO("MASCULINO"),
+    FEMININO("FEMININO"),
+    PREFIRO_NAO_DIZER("PREFIRO_NAO_DIZER");
 
     companion object {
         fun fromValue(value: String): Generos {
