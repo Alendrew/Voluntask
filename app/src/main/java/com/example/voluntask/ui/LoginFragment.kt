@@ -16,11 +16,13 @@ import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
 import com.example.voluntask.viewmodels.AuthViewModel
+import com.example.voluntask.viewmodels.SharedViewModel
 
 
 class LoginFragment : Fragment() {
 
     private lateinit var binding: FragmentLoginBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         val viewModel = ViewModelProvider(this)[AuthViewModel::class.java]
         val customToast = CustomToast(binding.customToast, requireContext())
         var loadingUI: LoadingUI
@@ -62,9 +65,9 @@ class LoginFragment : Fragment() {
                 viewModel.login(email, senha) { resultado ->
                     if (resultado.result) {
                         viewModel.getUserInfo(resultado.user!!.uid.toString()) { usuario ->
-                            val bundle = bundleOf("usuario" to usuario)
+                            sharedViewModel.setUser(usuario!!)
                             Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_loginFragment_to_homeFragment, bundle)
+                                .navigate(R.id.action_loginFragment_to_homeFragment)
                         }
                     } else {
                         customToast.showCustomToast(resultado.msg, Types.ERROR)

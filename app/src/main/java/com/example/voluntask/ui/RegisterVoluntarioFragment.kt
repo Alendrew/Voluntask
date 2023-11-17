@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.voluntask.R
 import com.example.voluntask.databinding.FragmentRegisterVoluntarioBinding
-import com.example.voluntask.models.Instituicao
 import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.enums.Generos
 import com.example.voluntask.models.enums.TipoConta
@@ -104,7 +103,8 @@ class RegisterVoluntarioFragment : Fragment() {
                 dataNascimento.isBlank() ||
                 cpf.isBlank() ||
                 senha.isBlank() ||
-                confirmarSenha.toString().isBlank()
+                binding.inputGenero.text.toString().isBlank() ||
+                confirmarSenha.isBlank()
             ) {
                 customToast.showCustomToast("Todos os campos precisam ser preenchidos",Types.WARNING)
             } else if (!Patterns.EMAIL_ADDRESS.matcher(binding.inputEmail.text.toString())

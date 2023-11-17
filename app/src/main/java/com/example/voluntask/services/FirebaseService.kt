@@ -50,13 +50,14 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
 
     }
 
-    suspend fun updateItem(idItem: String, item: T) {
-        try {
+    suspend fun updateItem(idItem: String, item: T): Boolean {
+        return try {
             itemCollections.document(idItem).update(item.toMap()).await()
+            true
         } catch (e: Exception) {
             Log.e(TAG, "Error updating", e)
+            false
         }
-
     }
 
 

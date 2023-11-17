@@ -2,7 +2,6 @@ package com.example.voluntask.ui
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,9 @@ import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.voluntask.R
 import com.example.voluntask.adapters.EventoAdapter
@@ -22,14 +23,15 @@ import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.viewmodels.HomeViewModel
+import com.example.voluntask.viewmodels.SharedViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.sql.Date
-import java.time.Instant
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +45,26 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.searchView.isIconified = false;
-        binding.searchView.isIconifiedByDefault = false
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        val userInfo = arguments?.getParcelable<Usuario>("usuario")
-        viewModel.userInfo = userInfo
+
+
+        sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+            if (usuario.tipoConta == TipoConta.VOLUNTARIO) {
+                binding.fab.visibility = View.GONE
+            }
+        }
+
+
+        binding.fab.setOnClickListener {
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_homeFragment_to_EventoFragment)
+        }
+
         val adapter = EventoAdapter {
 //            openLink(it.link)
         }
+
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = adapter
@@ -61,7 +75,7 @@ class HomeFragment : Fragment() {
 
         var selectedCategoriaPosition: Int = -1
         var selectedStatusPosition: Int = -1
-
+        var selectedName: String = ""
 
         var anoS = ""
         var mesS = ""
@@ -75,13 +89,19 @@ class HomeFragment : Fragment() {
         var selectedStatus: Status? = null
 
         binding.filterDialog.setOnClickListener {
+
             val dialogView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null)
 
-            if (viewModel.userInfo!!.tipoConta != TipoConta.VOLUNTARIO) {
-                dialogView.findViewById<FrameLayout>(R.id.layoutMeus).visibility = View.GONE
+
+            sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                if (usuario!!.tipoConta != TipoConta.VOLUNTARIO) {
+                    dialogView.findViewById<FrameLayout>(R.id.layoutMeus).visibility = View.GONE
+                }
             }
 
+
+            val nameEvento = dialogView.findViewById<TextInputEditText>(R.id.filterName)
             val spinnerCategoria =
                 dialogView.findViewById<AutoCompleteTextView>(R.id.filterCategoria)
             val spinnerStatus = dialogView.findViewById<AutoCompleteTextView>(R.id.filterStatus)
@@ -108,6 +128,7 @@ class HomeFragment : Fragment() {
                             mesS = "%02d".format(monthOfYear + 1)
                             diaS = "%02d".format(dayOfMonth)
                             val date = "$diaS/$mesS/$anoS"
+                            selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
                             dataPickerStart.setText(date)
                         },
                         mYear,
@@ -130,6 +151,7 @@ class HomeFragment : Fragment() {
                             mesE = "%02d".format(monthOfYear + 1)
                             diaE = "%02d".format(dayOfMonth)
                             val date = "$diaE/$mesE/$anoE"
+                            selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
                             dataPickerEnd.setText(date)
                         },
                         mYear,
@@ -140,32 +162,44 @@ class HomeFragment : Fragment() {
             })
 
 
-            if (anoS != "") {
-                selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
-            }
-            if (anoE != "") {
-                selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
-            }
-
             if (selectedDateStart != null) {
                 val calendar = Calendar.getInstance()
                 calendar.time = selectedDateStart!!
-                dataPickerStart.setText("${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${"%02d".format(calendar.get(Calendar.MONTH) + 1)}/${calendar.get(Calendar.YEAR)}")
+                dataPickerStart.setText(
+                    "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
+                        "%02d".format(
+                            calendar.get(Calendar.MONTH) + 1
+                        )
+                    }/${calendar.get(Calendar.YEAR)}"
+                )
             }
-
             if (selectedDateEnd != null) {
                 val calendar = Calendar.getInstance()
                 calendar.time = selectedDateEnd!!
-                dataPickerEnd.setText("${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${"%02d".format(calendar.get(Calendar.MONTH) + 1)}/${calendar.get(Calendar.YEAR)}")
+                dataPickerEnd.setText(
+                    "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
+                        "%02d".format(
+                            calendar.get(Calendar.MONTH) + 1
+                        )
+                    }/${calendar.get(Calendar.YEAR)}"
+                )
+            }
+
+            if (selectedName != "") {
+                nameEvento.setText(selectedName)
             }
 
 
             if (selectedCategoriaPosition != -1) {
-                spinnerCategoria.setText(spinnerCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false);
+                spinnerCategoria.setText(
+                    spinnerCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false
+                );
             }
 
             if (selectedStatusPosition != -1) {
-                spinnerStatus.setText(spinnerStatus.adapter.getItem(selectedStatusPosition).toString(), false);
+                spinnerStatus.setText(
+                    spinnerStatus.adapter.getItem(selectedStatusPosition).toString(), false
+                );
             }
 
             spinnerCategoria.setOnItemClickListener { _, _, position, _ ->
@@ -176,7 +210,7 @@ class HomeFragment : Fragment() {
                     else -> null
                 }
 
-                if (selectedItem != null){
+                if (selectedItem != null) {
                     selectedCategoria = Categorias.fromValue(selectedItem)
                     selectedCategoriaPosition = position
                 }
@@ -189,7 +223,7 @@ class HomeFragment : Fragment() {
                     else -> null
                 }
 
-                if (selectedItem != null){
+                if (selectedItem != null) {
                     selectedStatus = Status.fromValue(selectedItem)
                     selectedStatusPosition = position
                 }
@@ -201,16 +235,17 @@ class HomeFragment : Fragment() {
                 .setView(dialogView)
                 .setPositiveButton("Aplicar") { _, _ ->
                     // Obter valores selecionados
-                    var filteredList: List<Evento>
-                    viewModel.getAllEventos { eventos ->
-                        filteredList = eventos.filter {
-                            selectedCategoria == null || it.categoria == selectedCategoria &&
-                            selectedStatus == null || it.status == selectedStatus &&
-                            selectedDateStart == null || it.dataInicio == selectedDateStart &&
-                            selectedDateEnd == null || it.dataFim == selectedDateEnd
-                        }
-                        adapter.setEventoList(filteredList)
+                    selectedName = nameEvento.text.toString()
+                    val eventos: List<Evento> = adapter.getItems()
+                    val filteredList = eventos.filter {
+                        (selectedCategoria == null || it.categoria == selectedCategoria) &&
+                                (selectedStatus == null || it.status == selectedStatus) &&
+                                (selectedDateStart == null || it.dataInicio == selectedDateStart) &&
+                                (selectedDateEnd == null || it.dataFim == selectedDateEnd) &&
+                                (selectedName == "" || it.nome == selectedName)
                     }
+
+                    adapter.setEventoList(filteredList)
                 }
                 .setNegativeButton("Cancelar", null)
                 .setNeutralButton("Limpar") { _, _ ->
@@ -230,6 +265,7 @@ class HomeFragment : Fragment() {
                     selectedStatusPosition = -1
                     dataPickerStart.setText("")
                     dataPickerEnd.setText("")
+                    selectedName = ""
                     viewModel.getAllEventos { eventos ->
                         adapter.setEventoList(eventos)
                     }

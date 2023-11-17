@@ -9,6 +9,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.voluntask.R
 import com.example.voluntask.databinding.ResItemEventoBinding
 import com.example.voluntask.models.Evento
+import java.util.Locale
+
 
 class EventoAdapter(private val onItemClicked: (Evento) -> Unit) : Adapter<RecyclerView.ViewHolder>() {
 
@@ -24,6 +26,10 @@ class EventoAdapter(private val onItemClicked: (Evento) -> Unit) : Adapter<Recyc
         return items.size
     }
 
+    fun getItems(): List<Evento>{
+        return items
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder){
             is VideoViewHolder -> {
@@ -37,6 +43,7 @@ class EventoAdapter(private val onItemClicked: (Evento) -> Unit) : Adapter<Recyc
         this.items = items.toMutableList()
         notifyDataSetChanged()
     }
+
 
     class VideoViewHolder constructor(
         itemView: View

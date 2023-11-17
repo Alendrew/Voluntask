@@ -14,8 +14,8 @@
             >
 
             <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginStart="10dp"
                 android:layout_gravity="start|center"
                 android:src="@drawable/user"
@@ -49,29 +49,21 @@
             android:layout_height="35dp"/>
 
 
-
-
-    <FrameLayout
-        android:layout_width="350dp"
+    <Button
+        android:id="@+id/filterDialog"
+        android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_gravity="center">
-
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="300dp"
-            android:queryHint="Nome do evento"
-            android:layout_height="50dp"
-            android:layout_gravity="start|center"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:background="@drawable/custom_border"
-            android:backgroundTint="#E3E3E3"/>
-        <ImageView
-            android:id="@+id/filterDialog"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="end|center"
-            android:src="@drawable/baseline_filter_alt_24" />
-    </FrameLayout>
+        android:layout_gravity="center"
+        android:backgroundTint="#6F70B5"
+        android:text="Filtrar eventos"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:drawableTint="@color/white"
+        android:drawableEnd="@drawable/baseline_filter_alt_24"
+        tools:layout_editor_absoluteX="70dp"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteY="501dp"/>
 
     <Space
         android:layout_width="match_parent"

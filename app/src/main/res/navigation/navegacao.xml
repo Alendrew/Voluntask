@@ -31,7 +31,12 @@
         android:id="@+id/homeFragment"
         android:name="com.example.voluntask.ui.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_EventoFragment"
+            app:destination="@id/EventoFragment"
+            app:enterAnim="@android:anim/slide_in_left" />
+    </fragment>
     <fragment
         android:id="@+id/registerVoluntarioFragment"
         android:name="com.example.voluntask.ui.RegisterVoluntarioFragment"

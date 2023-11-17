@@ -25,8 +25,8 @@
             android:background="#BABBFF">
 
             <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_gravity="start|center"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/user" />

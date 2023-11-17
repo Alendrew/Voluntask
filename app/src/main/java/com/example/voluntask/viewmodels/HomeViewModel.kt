@@ -9,7 +9,6 @@ import com.example.voluntask.util.Resultado
 import kotlinx.coroutines.launch
 
 class HomeViewModel: ViewModel() {
-    var userInfo: Usuario? = null
 
     fun getAllEventos(callback: (List<Evento>) -> Unit) {
         viewModelScope.launch {
