@@ -15,6 +15,11 @@ class EventoViewModel: ViewModel() {
         }
     }
 
+    fun getAllEventos(callback: (List<Evento>) -> Unit) {
+        viewModelScope.launch {
+            callback(FirebaseService<Evento>("Eventos").getAllEventos())
+        }
+    }
 
     fun updateEvento(evento: Evento, callback: (Boolean) -> Unit) {
         viewModelScope.launch {

@@ -19,10 +19,9 @@ import com.example.voluntask.databinding.FragmentHome2Binding
 import com.example.voluntask.models.Evento
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
-import com.example.voluntask.viewmodels.HomeViewModel
+import com.example.voluntask.viewmodels.EventoViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
 import com.google.android.material.textfield.TextInputEditText
-import java.sql.Date
 import java.time.LocalDate
 import java.util.Calendar
 
@@ -44,7 +43,7 @@ class Home2Fragment : Fragment() {
     ): View {
         binding = FragmentHome2Binding.inflate(inflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
 
         binding.btnDisponiveis.setOnClickListener {
             Navigation.findNavController(binding.root)
@@ -60,6 +59,8 @@ class Home2Fragment : Fragment() {
         viewModel.getAllEventos { eventos ->
             adapter.setEventoList(eventos)
         }
+
+
 
 
         binding.recyclerView.layoutManager =
@@ -81,6 +82,23 @@ class Home2Fragment : Fragment() {
         var selectedDateEnd: LocalDate? = null
         var selectedCategoria: Categorias? = null
         var selectedStatus: Status? = null
+
+
+        // TODO: CHAMAR INSCRIÇÕES E NÃO EVENTOS NORMAIS 
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            val eventos: List<Evento> = adapter.getItems()
+            val filteredList = eventos.filter {
+                (selectedCategoria == null || it.categoria == selectedCategoria) &&
+                        (selectedStatus == null || it.status == selectedStatus) &&
+                        (selectedDateStart == null || it.dataInicio == selectedDateStart.toString()) &&
+                        (selectedDateEnd == null || it.dataFim == selectedDateEnd.toString()) &&
+                        (selectedName == "" || it.nome == selectedName)
+            }
+
+            adapter.setEventoList(filteredList)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
 
         binding.filterDialog.setOnClickListener {
 

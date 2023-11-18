@@ -7,12 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,15 +17,13 @@ import com.example.voluntask.R
 import com.example.voluntask.adapters.EventoAdapter
 import com.example.voluntask.databinding.FragmentHomeBinding
 import com.example.voluntask.models.Evento
-import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.enums.TipoConta
-import com.example.voluntask.viewmodels.HomeViewModel
+import com.example.voluntask.viewmodels.EventoViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.sql.Date
 import java.time.LocalDate
 import java.util.Calendar
 
@@ -50,7 +45,7 @@ class HomeFragment : Fragment() {
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
 
         binding.btnMeus.setOnClickListener {
             Navigation.findNavController(binding.root)
@@ -71,8 +66,6 @@ class HomeFragment : Fragment() {
                 }
             }
         }
-
-
 
         sharedViewModel.usuario.observe(viewLifecycleOwner)
         { usuario ->
@@ -122,6 +115,21 @@ class HomeFragment : Fragment() {
         var selectedDateEnd: LocalDate? = null
         var selectedCategoria: Categorias? = null
         var selectedStatus: Status? = null
+
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            val eventos: List<Evento> = adapter.getItems()
+            val filteredList = eventos.filter {
+                (selectedCategoria == null || it.categoria == selectedCategoria) &&
+                        (selectedStatus == null || it.status == selectedStatus) &&
+                        (selectedDateStart == null || it.dataInicio == selectedDateStart.toString()) &&
+                        (selectedDateEnd == null || it.dataFim == selectedDateEnd.toString()) &&
+                        (selectedName == "" || it.nome == selectedName)
+            }
+
+            adapter.setEventoList(filteredList)
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
 
         binding.filterDialog.setOnClickListener{
 

@@ -52,14 +52,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/nomeInstLayout"
+            android:enabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:hint="Nome da instituição" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nomeInst"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -71,14 +75,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/descLayout"
+            android:enabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:hint="Descrição" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/desc"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -90,6 +98,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/localLayout"
+            android:enabled="false"
+            android:clickable="false"
+            android:focusable="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="350dp"
             android:layout_height="60dp"
@@ -98,6 +109,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/local"
+                android:enabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clickable="false"
@@ -114,6 +126,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dataSLayout"
+                android:enabled="false"
+                android:clickable="false"
+                android:focusable="false"
                 android:layout_gravity="start|center"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="170dp"
@@ -122,6 +137,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dataS"
+                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
@@ -132,6 +148,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/dataELayout"
+                android:enabled="false"
+                android:clickable="false"
+                android:focusable="false"
                 android:layout_gravity="end|center"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="170dp"
@@ -140,6 +159,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/dataE"
+                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
@@ -158,6 +178,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/categoriaLayout"
+                android:enabled="false"
+                android:clickable="false"
+                android:focusable="false"
                 android:layout_gravity="start|center"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="170dp"
@@ -166,6 +189,7 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/categoria"
+                    android:enabled="false"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:clickable="false"
@@ -176,6 +200,9 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/statusLayout"
+                android:clickable="false"
+                android:focusable="false"
+                android:enabled="false"
                 android:layout_gravity="end|center"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="170dp"
@@ -213,6 +240,7 @@
                 android:visibility="gone" />
 
             <Button
+                tools:visibility="visible"
                 android:id="@+id/btnRegister"
                 android:layout_width="271dp"
                 android:layout_height="48dp"
@@ -221,13 +249,9 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="#018901"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
 
-        <Space
-            android:layout_width="271dp"
-            android:layout_height="10dp"
-            android:layout_gravity="center" />
     </LinearLayout>
 
     <TextView

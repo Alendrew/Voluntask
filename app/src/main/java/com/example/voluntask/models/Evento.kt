@@ -43,7 +43,7 @@ data class Evento(
     }
 
     companion object {
-        fun DocumentSnapshot.toObject(): Evento? {
+        fun DocumentSnapshot.toEvento(): Evento? {
             try {
                 val nome = getString("nome")!!
                 val localizacao = getString("localizacao")!!

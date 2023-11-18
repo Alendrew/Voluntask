@@ -17,17 +17,13 @@ import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
-import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
 import com.example.voluntask.viewmodels.EventoViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
-import java.sql.Date.valueOf
-import java.time.Instant
 import java.time.LocalDate
 import java.util.Calendar
-import java.util.Date
 
 class EventoFragment : Fragment() {
 

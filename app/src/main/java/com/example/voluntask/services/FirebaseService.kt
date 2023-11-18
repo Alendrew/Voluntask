@@ -1,9 +1,11 @@
 package com.example.voluntask.services
 
 import android.util.Log
+import com.example.voluntask.models.Evento.Companion.toEvento
 import com.example.voluntask.models.Evento
+import com.example.voluntask.models.Inscricao
+import com.example.voluntask.models.Inscricao.Companion.toInscricao
 import com.example.voluntask.models.Instituicao
-import com.example.voluntask.models.Instituicao.Companion.toObject
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.interfaces.ConvertibleToMap
@@ -42,11 +44,13 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         }
     }
 
-    suspend fun deleteItem(idItem: String) {
-        try {
+    suspend fun deleteItem(idItem: String): Boolean {
+        return try {
             itemCollections.document(idItem).delete().await()
+            true
         } catch (e: Exception) {
             Log.e(TAG, "Error deleting", e)
+            false
         }
 
     }
@@ -92,12 +96,60 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         try {
             val doc = itemCollections.get().await()
             for (registro in doc) {
-                val itemConvertido = registro.toObject(Evento::class.java)
-                itemConvertido.idEvento = registro.id
-                lista.add(itemConvertido)
+                val itemConvertido = registro.toEvento()
+                if (itemConvertido != null) {
+                    itemConvertido.idEvento = registro.id
+                    lista.add(itemConvertido)
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error fetching eventos: $e")
+        }
+
+        return lista
+    }
+
+    suspend fun searchInscricaoByEvento(idEvento: String, idUsuario: String): Inscricao? {
+        var eventoTemInscricoes: QuerySnapshot
+        try {
+             eventoTemInscricoes = itemCollections.whereEqualTo("idEvento", idEvento).get().await()
+            if (eventoTemInscricoes.isEmpty){
+                return null
+            }else{
+                val lista: MutableList<Inscricao> = mutableListOf()
+                for (registro in eventoTemInscricoes) {
+                    val itemConvertido = registro.toInscricao()
+                    if (itemConvertido != null) {
+                        itemConvertido.idInscricao = registro.id
+                        lista.add(itemConvertido)
+                    }
+                }
+                lista.filter {
+                    it.idUsuario == idUsuario
+                }
+                return lista[0]
+            }
+
+        } catch (e: Exception) {
+            Log.e(TAG,"Error getting user info", e)
+        }
+        return null
+    }
+
+    suspend fun getAllInscricoes(): List<Inscricao> {
+        val lista: MutableList<Inscricao> = mutableListOf()
+
+        try {
+            val doc = itemCollections.get().await()
+            for (registro in doc) {
+                val itemConvertido = registro.toInscricao()
+                if (itemConvertido != null) {
+                    itemConvertido.idInscricao = registro.id
+                    lista.add(itemConvertido)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error fetching inscricoes: $e")
         }
 
         return lista
