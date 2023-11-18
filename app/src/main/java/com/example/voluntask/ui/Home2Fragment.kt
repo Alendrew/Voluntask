@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -50,7 +51,9 @@ class Home2Fragment : Fragment() {
         }
 
         val adapter = EventoAdapter {
-//            openLink(it.link)
+            val bundle = bundleOf("evento" to it)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_home2Fragment_to_inscricaoFragment, bundle)
         }
 
         viewModel.getAllEventos { eventos ->

@@ -10,6 +10,6 @@ abstract class Usuario : ConvertibleToMap, Parcelable {
     abstract var nome: String
     abstract var idUsuario: String
     abstract var telefone: String
-    abstract var dataCadastro: Date
+    abstract var dataCadastro: LocalDate
     abstract var tipoConta: TipoConta
 }

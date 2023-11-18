@@ -1,17 +1,28 @@
 package com.example.voluntask.ui
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.voluntask.R
+import com.example.voluntask.databinding.FragmentHome2Binding
+import com.example.voluntask.databinding.FragmentInscricaoBinding
+import com.example.voluntask.models.Evento
+import com.example.voluntask.models.enums.Categorias
+import com.example.voluntask.models.enums.Status
+import com.example.voluntask.models.enums.TipoConta
+import com.example.voluntask.viewmodels.SharedViewModel
+import java.util.Calendar
 
 
 class InscricaoFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var binding: FragmentInscricaoBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +34,70 @@ class InscricaoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_inscricao, container, false)
+        val evento = arguments?.getParcelable<Evento>("evento")
+        binding = FragmentInscricaoBinding.inflate(inflater, container, false)
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+
+        if (evento!!.status == Status.ENCERRADO){
+            binding.btnRegister.isEnabled = false
+            binding.btnRegister.setBackgroundColor(Color.parseColor("#737373"))
+        }
+
+        sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+            binding.nomeInst.setText(usuario.nome)
+        }
+
+        Log.i("DATAS", "Data inicio ${evento.dataInicio.toString()}")
+        Log.i("DATAS", "Data Fim ${evento.dataFim.toString()}")
+        Log.i("DATAS", "Data cadastro ${evento.dataCadastro.toString()}")
+
+        val calendar = Calendar.getInstance()
+        calendar.time = evento.dataInicio
+        binding.dataS.setText(
+            "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
+                "%02d".format(
+                    calendar.get(Calendar.MONTH) + 1
+                )
+            }/${calendar.get(Calendar.YEAR)}"
+        )
+
+        calendar.time = evento.dataFim
+        binding.dataE.setText(
+            "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
+                "%02d".format(
+                    calendar.get(Calendar.MONTH) + 1
+                )
+            }/${calendar.get(Calendar.YEAR)}"
+        )
+
+
+
+        binding.categoria.setText(
+            when (evento.categoria) {
+                Categorias.DOACAO -> "Doação"
+                Categorias.LIMPEZA -> "Limpeza"
+                Categorias.CARIDADE -> "Caridade"
+            }
+        )
+
+        binding.status.setText(
+            when (evento.status) {
+                Status.ATIVO -> "Ativo"
+                Status.ENCERRADO -> "Encerrado"
+            }
+        )
+
+
+
+        binding.name.setText(evento.nome)
+        binding.local.setText(evento.localizacao)
+        binding.desc.setText(evento.descricao)
+
+        binding.btnRegister.setOnClickListener {
+
+        }
+
+        return binding.root
     }
 
     companion object {

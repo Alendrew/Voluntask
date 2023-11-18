@@ -5,16 +5,17 @@ import android.util.Log
 import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.util.Date
 
 @Parcelize
 data class Inscricao(
     var idEvento:String,
     var idUsuario:String,
-    var dataInscricao:Date
+    var dataInscricao:LocalDate
 ): Parcelable, ConvertibleToMap {
 
-    constructor(): this("","",Date())
+    constructor(): this("","", LocalDate.now())
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -29,7 +30,7 @@ data class Inscricao(
             try {
                 val idEvento = getString("idEvento")!!
                 val idUsuario = getString("idUsuario")!!
-                val dataInscricao = getTimestamp("dataInscricao")!!.toDate()
+                val dataInscricao = LocalDate.parse(getString("dataInscricao")!!)
 
                 return Inscricao(
                     idEvento = idEvento,

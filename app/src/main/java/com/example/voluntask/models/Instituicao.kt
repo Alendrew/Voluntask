@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.voluntask.models.enums.TipoConta
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.util.Date
 
 @Parcelize
@@ -16,10 +17,10 @@ data class Instituicao(
     var cnpj: String,
     override var idUsuario: String,
     var cpfRepresentanteLegal: String,
-    override var dataCadastro: Date,
+    override var dataCadastro: LocalDate,
 ): Usuario(), Parcelable {
 
-    constructor(): this("","","",TipoConta.INSTITUICAO,"","","",Date())
+    constructor(): this("","","",TipoConta.INSTITUICAO,"","","", LocalDate.now())
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -42,7 +43,7 @@ data class Instituicao(
                 val telefone = getString("telefone")!!
                 val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
                 val cnpj = getString("cnpj")!!
-                val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
+                val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
                 val cpfRepresentanteLegal = getString("cpfRepresentanteLegal")!!
                 val nomeRepresentanteLegal = getString("nomeRepresentanteLegal")!!
 

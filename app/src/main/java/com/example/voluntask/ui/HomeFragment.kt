@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -54,11 +56,25 @@ class HomeFragment : Fragment() {
                 .navigate(R.id.action_homeFragment_to_home2Fragment)
         }
 
+
         val adapter = EventoAdapter {
-//            openLink(it.link)
+            sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                if (usuario.tipoConta == TipoConta.VOLUNTARIO) {
+                    val bundle = bundleOf("evento" to it)
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_homeFragment_to_inscricaoFragment, bundle)
+                } else {
+//                    editar evento
+//                    Navigation.findNavController(binding.root)
+//                        .navigate(R.id.action_homeFragment_to_inscricaoFragment)
+                }
+            }
         }
 
-        sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+
+
+        sharedViewModel.usuario.observe(viewLifecycleOwner)
+        { usuario ->
             var eventosList: List<Evento>? = null
             viewModel.getAllEventos { eventos ->
                 eventosList = eventos
@@ -68,7 +84,7 @@ class HomeFragment : Fragment() {
                         (it.status == Status.ATIVO)
                     }
                     adapter.setEventoList(filteredList)
-                }else{
+                } else {
                     binding.fab.visibility = View.VISIBLE
                     val filteredList = eventosList!!.filter {
                         (it.idInstituicao == usuario.idUsuario)
@@ -80,7 +96,7 @@ class HomeFragment : Fragment() {
 
 
 
-        binding.fab.setOnClickListener {
+        binding.fab.setOnClickListener() {
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_homeFragment_to_EventoFragment)
         }
@@ -106,13 +122,14 @@ class HomeFragment : Fragment() {
         var selectedCategoria: Categorias? = null
         var selectedStatus: Status? = null
 
-        binding.filterDialog.setOnClickListener {
+        binding.filterDialog.setOnClickListener{
 
             val dialogView =
                 LayoutInflater.from(requireContext()).inflate(R.layout.dialog_filter, null)
 
             val spinnerStatus = dialogView.findViewById<AutoCompleteTextView>(R.id.filterStatus)
-            val spinnerStatusLayout = dialogView.findViewById<TextInputLayout>(R.id.filterStatusLayout)
+            val spinnerStatusLayout =
+                dialogView.findViewById<TextInputLayout>(R.id.filterStatusLayout)
 
             sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
                 if (usuario!!.tipoConta == TipoConta.VOLUNTARIO) {
@@ -295,7 +312,7 @@ class HomeFragment : Fragment() {
                                     (it.status == Status.ATIVO)
                                 }
                                 adapter.setEventoList(filteredList)
-                            }else{
+                            } else {
                                 val filteredList = eventosList!!.filter {
                                     (it.idInstituicao == usuario.idUsuario)
                                 }

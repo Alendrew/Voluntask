@@ -19,31 +19,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#BABBFF">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="start|center"
-                android:layout_marginStart="10dp"
-                android:src="@drawable/user" />
-
-            <ImageView
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="end"
-                android:src="@drawable/simple_logo" />
-        </FrameLayout>
-
-
         <Space
             android:layout_width="match_parent"
             android:layout_height="15dp" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Dando Sopa"
@@ -54,33 +35,169 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="15dp" />
+            android:layout_height="10dp" />
 
 
 <!--        trocar imagem de acordo com a categoria-->
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:id="@+id/icon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:src="@drawable/pessoas" />
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="10dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nomeInstLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
             android:layout_gravity="center"
-            android:text="@string/fake_event"
-            android:textAlignment="center"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:lineHeight="30sp" />
+            android:hint="Nome da instituição" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nomeInst"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:maxLength="50"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="350dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:hint="Descrição" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/desc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:maxLength="50"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/localLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:hint="Endereço" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/local"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="false"
+                android:focusable="false"
+                android:maxLength="50"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_height="60dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dataSLayout"
+                android:layout_gravity="start|center"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:hint="Data Início" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dataS"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dataELayout"
+                android:layout_gravity="end|center"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:hint="Data Fim" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dataE"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="350dp"
+            android:layout_gravity="center"
+            android:layout_height="60dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/categoriaLayout"
+                android:layout_gravity="start|center"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:hint="Categoria" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/categoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/statusLayout"
+                android:layout_gravity="end|center"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="170dp"
+                android:layout_height="match_parent"
+                android:hint="Status" >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </FrameLayout>
 
         <Space
             android:layout_width="271dp"
-            android:layout_height="25dp"
+            android:layout_height="10dp"
             android:layout_gravity="center" />
 
         <LinearLayout
@@ -128,7 +245,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.235"
+        app:layout_constraintVertical_bias="0.0"
         tools:drawableLeft="@drawable/baseline_error_24"
         tools:drawableRight="@drawable/baseline_error_24"
         tools:drawableTint="#E40000"

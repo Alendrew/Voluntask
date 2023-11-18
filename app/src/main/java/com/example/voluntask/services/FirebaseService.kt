@@ -91,7 +91,11 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         try {
             val doc = itemCollections.get().await()
             for (registro in doc) {
+                Log.i("FIREBASE_DATA", registro.getTimestamp("dataHoraFim").toString())
+                Log.i("FIREBASE_DATA", registro.getTimestamp("dataHoraInicio").toString())
+
                 val itemConvertido = registro.toObject(Evento::class.java)
+                itemConvertido.idEvento = registro.id
                 lista.add(itemConvertido)
             }
         } catch (e: Exception) {

@@ -22,7 +22,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="15dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -145,9 +145,30 @@
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputStatusLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="271dp"
+            android:layout_height="60dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_gravity="center">
+
+            <AutoCompleteTextView
+                android:id="@+id/inputStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:hint="Status"
+                android:importantForAccessibility="no"
+                android:inputType="none"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Space
             android:layout_width="271dp"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_gravity="center" />
 
         <LinearLayout
@@ -183,6 +204,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Excluir evento"
+            android:visibility="gone"
             android:layout_gravity="center"
             />
     </LinearLayout>
@@ -202,7 +224,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.135"
+        app:layout_constraintVertical_bias="0.0"
         tools:drawableLeft="@drawable/baseline_error_24"
         tools:drawableRight="@drawable/baseline_error_24"
         tools:drawableTint="#E40000"

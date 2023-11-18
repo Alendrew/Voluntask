@@ -6,21 +6,22 @@ import com.example.voluntask.models.enums.Generos
 import com.example.voluntask.models.enums.TipoConta
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.util.Date
 
 @Parcelize
 data class Voluntario(
     override  var nome: String,
     override var telefone: String,
-    override var dataCadastro: Date,
+    override var dataCadastro: LocalDate,
     override var tipoConta: TipoConta,
     override var idUsuario: String,
-    var dataNascimento: Date,
+    var dataNascimento: LocalDate,
     var cpf: String,
     var genero: Generos
 ): Usuario(),Parcelable {
 
-    constructor(): this("","",Date(),TipoConta.VOLUNTARIO,"",Date(),"",Generos.PREFIRO_NAO_DIZER)
+    constructor(): this("","", LocalDate.now(),TipoConta.VOLUNTARIO,"", LocalDate.now(),"",Generos.PREFIRO_NAO_DIZER)
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -43,8 +44,8 @@ data class Voluntario(
                  val telefone = getString("telefone")!!
                  val cpf = getString("cpf")!!
                  val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
-                 val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
-                 val dataNascimento = getTimestamp("dataNascimento")!!.toDate()
+                 val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
+                 val dataNascimento = LocalDate.parse(getString("dataNascimento")!!)
                  val genero = Generos.fromValue(getString("genero")!!)
                  return Voluntario(
                      nome = nome,

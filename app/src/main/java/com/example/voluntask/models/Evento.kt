@@ -7,6 +7,7 @@ import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.parcelize.Parcelize
+import java.time.LocalDate
 import java.util.Date
 
 @Parcelize
@@ -15,14 +16,15 @@ data class Evento(
     var localizacao:String,
     var descricao:String,
     var idInstituicao:String,
-    var dataInicio:Date,
-    var dataFim: Date,
-    var dataCadastro:Date,
+    var dataInicio:LocalDate,
+    var dataFim: LocalDate,
+    var dataCadastro:LocalDate,
     var categoria:Categorias,
     var status:Status
 ): Parcelable, ConvertibleToMap {
 
-    constructor(): this("", "","","", Date(),Date(),Date(),Categorias.CARIDADE,Status.ENCERRADO)
+    constructor(): this("", "","","", LocalDate.now(),
+        LocalDate.now(), LocalDate.now(),Categorias.CARIDADE,Status.ENCERRADO)
 
     var idEvento:String = ""
 
@@ -32,7 +34,6 @@ data class Evento(
             "localizacao" to localizacao,
             "descricao" to descricao,
             "idInstituicao" to idInstituicao,
-            "idEvento" to idEvento,
             "dataHoraInicio" to dataInicio,
             "dataHoraFim"  to dataFim,
             "dataCadastro" to dataCadastro,
@@ -48,14 +49,13 @@ data class Evento(
                 val localizacao = getString("localizacao")!!
                 val descricao = getString("descricao")!!
                 val idInstituicao = getString("idInstituicao")!!
-                val idEvento = getString("idEvento")!!
-                val dataHoraInicio = getTimestamp("dataHoraInicio")!!.toDate()
-                val dataHoraFim = getTimestamp("dataHoraFim")!!.toDate()
-                val dataCadastro = getTimestamp("dataCadastro")!!.toDate()
+                val dataHoraInicio = LocalDate.parse(getString("dataHoraInicio")!!)
+                val dataHoraFim = LocalDate.parse(getString("dataHoraFim")!!)
+                val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
                 val categoria = Categorias.fromValue(getString("categoria")!!)
                 val status = Status.fromValue(getString("status")!!)
 
-                val evento = Evento(
+                return Evento(
                     nome = nome,
                     localizacao = localizacao,
                     descricao = descricao,
@@ -66,8 +66,6 @@ data class Evento(
                     categoria = categoria,
                     status = status
                 )
-                evento.idEvento = idEvento
-                return evento
             } catch (e: Exception) {
                 Log.e(TAG, "Error converting evento", e)
                 return null
