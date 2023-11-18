@@ -17,10 +17,10 @@ data class Instituicao(
     var cnpj: String,
     override var idUsuario: String,
     var cpfRepresentanteLegal: String,
-    override var dataCadastro: LocalDate,
+    override var dataCadastro: String,
 ): Usuario(), Parcelable {
 
-    constructor(): this("","","",TipoConta.INSTITUICAO,"","","", LocalDate.now())
+    constructor(): this("","","",TipoConta.INSTITUICAO,"","","", "")
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -43,7 +43,7 @@ data class Instituicao(
                 val telefone = getString("telefone")!!
                 val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
                 val cnpj = getString("cnpj")!!
-                val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
+                val dataCadastro = getString("dataCadastro")!!
                 val cpfRepresentanteLegal = getString("cpfRepresentanteLegal")!!
                 val nomeRepresentanteLegal = getString("nomeRepresentanteLegal")!!
 

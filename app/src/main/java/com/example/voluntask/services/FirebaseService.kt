@@ -10,6 +10,7 @@ import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.example.voluntask.util.Resultado
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -91,9 +92,6 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         try {
             val doc = itemCollections.get().await()
             for (registro in doc) {
-                Log.i("FIREBASE_DATA", registro.getTimestamp("dataHoraFim").toString())
-                Log.i("FIREBASE_DATA", registro.getTimestamp("dataHoraInicio").toString())
-
                 val itemConvertido = registro.toObject(Evento::class.java)
                 itemConvertido.idEvento = registro.id
                 lista.add(itemConvertido)
@@ -106,26 +104,19 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
     }
 
     suspend fun registerWithEmail(usuario: Usuario, email: String, senha: String): Resultado {
-        try {
-            return if (auth.fetchSignInMethodsForEmail(email).await().signInMethods!!.isEmpty()) {
-                val user = auth.createUserWithEmailAndPassword(email, senha).await().user
-                if (user != null) {
-                    usuario.idUsuario = user.uid.toString()
-                    val userInfo = itemCollections.add(usuario.toMap()).await()
-                    if (userInfo != null) {
-                        Resultado(true, "Cadastrado com sucesso", user)
-                    } else {
-                        user.delete().await()
-                        Resultado(false, "Erro ao cadastrar", null)
-                    }
-                } else {
-                    Resultado(false, "Erro ao cadastrar", null)
-                }
+        var user: FirebaseUser? = null
+        return try {
+            if (auth.fetchSignInMethodsForEmail(email).await().signInMethods!!.isEmpty()) {
+                user = auth.createUserWithEmailAndPassword(email, senha).await().user
+                usuario.idUsuario = user!!.uid.toString()
+                itemCollections.add(usuario.toMap()).await()
+                Resultado(true, "Cadastrado com sucesso", user)
             } else {
                 Resultado(false, "Usuário já existe", null)
             }
         } catch (e: Exception) {
-            return Resultado(false, "Erro desconhecido", null)
+            user?.delete()?.await()
+            Resultado(false, "Erro ao cadastrar", null)
         }
     }
 

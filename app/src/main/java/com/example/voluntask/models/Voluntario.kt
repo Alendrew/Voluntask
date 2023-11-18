@@ -13,15 +13,15 @@ import java.util.Date
 data class Voluntario(
     override  var nome: String,
     override var telefone: String,
-    override var dataCadastro: LocalDate,
+    override var dataCadastro: String,
     override var tipoConta: TipoConta,
     override var idUsuario: String,
-    var dataNascimento: LocalDate,
+    var dataNascimento: String,
     var cpf: String,
     var genero: Generos
 ): Usuario(),Parcelable {
 
-    constructor(): this("","", LocalDate.now(),TipoConta.VOLUNTARIO,"", LocalDate.now(),"",Generos.PREFIRO_NAO_DIZER)
+    constructor(): this("","", "",TipoConta.VOLUNTARIO,"", "","",Generos.PREFIRO_NAO_DIZER)
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -44,8 +44,8 @@ data class Voluntario(
                  val telefone = getString("telefone")!!
                  val cpf = getString("cpf")!!
                  val tipoConta = TipoConta.fromValue(getString("tipoConta")!!)
-                 val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
-                 val dataNascimento = LocalDate.parse(getString("dataNascimento")!!)
+                 val dataCadastro = getString("dataCadastro")!!
+                 val dataNascimento = getString("dataNascimento")!!
                  val genero = Generos.fromValue(getString("genero")!!)
                  return Voluntario(
                      nome = nome,

@@ -24,6 +24,7 @@ import com.example.voluntask.util.Types
 import com.example.voluntask.viewmodels.AuthViewModel
 import java.sql.Date.valueOf
 import java.time.Instant
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 
@@ -93,7 +94,7 @@ class RegisterVoluntarioFragment : Fragment() {
             val cpf = binding.inputCpf.unMasked
             val dataNascimento = binding.inputData.text.toString()
             val confirmarSenha = binding.inputConfirmarSenha.text.toString()
-            val dataCadastro = Date.from(Instant.now())
+            val dataCadastro = LocalDate.now()
             val tipoConta = TipoConta.VOLUNTARIO
 
             if (
@@ -124,7 +125,7 @@ class RegisterVoluntarioFragment : Fragment() {
             } else {
 
                 val voluntario =
-                    Voluntario(nome, telefone, dataCadastro, tipoConta, "", valueOf("$ano-$mes-$dia"), cpf, genero)
+                    Voluntario(nome, telefone, "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}", tipoConta, "", "$ano-$mes-$dia", cpf, genero)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

@@ -12,10 +12,10 @@ import java.util.Date
 data class Inscricao(
     var idEvento:String,
     var idUsuario:String,
-    var dataInscricao:LocalDate
+    var dataInscricao:String
 ): Parcelable, ConvertibleToMap {
 
-    constructor(): this("","", LocalDate.now())
+    constructor(): this("","", "")
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -30,7 +30,7 @@ data class Inscricao(
             try {
                 val idEvento = getString("idEvento")!!
                 val idUsuario = getString("idUsuario")!!
-                val dataInscricao = LocalDate.parse(getString("dataInscricao")!!)
+                val dataInscricao = getString("dataInscricao")!!
 
                 return Inscricao(
                     idEvento = idEvento,

@@ -25,6 +25,7 @@ import com.example.voluntask.viewmodels.EventoViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
 import java.sql.Date.valueOf
 import java.time.Instant
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Date
 
@@ -125,7 +126,7 @@ class EventoFragment : Fragment() {
             val descricao = binding.inputDesc.text.toString()
             val dataS = binding.inputDataS.text.toString()
             val dataE = binding.inputDataE.text.toString()
-            val dataCadastro = Date.from(Instant.now())
+            val dataCadastro = LocalDate.now()
 
             if (
                 nome.isBlank() ||
@@ -145,7 +146,7 @@ class EventoFragment : Fragment() {
                 }
 
                 val evento =
-                    Evento(nome, localizacao, descricao, userInfo!!.idUsuario, valueOf("$anoS-$mesS-$diaS"), valueOf("$anoE-$mesE-$diaE"), dataCadastro, categoria, Status.ATIVO)
+                    Evento(nome, localizacao, descricao, userInfo!!.idUsuario, "$anoS-$mesS-$diaS", "$anoE-$mesE-$diaE", "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}", categoria, Status.ATIVO)
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

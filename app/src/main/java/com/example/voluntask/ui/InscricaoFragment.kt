@@ -16,6 +16,7 @@ import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.viewmodels.SharedViewModel
+import java.time.LocalDate
 import java.util.Calendar
 
 
@@ -38,7 +39,7 @@ class InscricaoFragment : Fragment() {
         binding = FragmentInscricaoBinding.inflate(inflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        if (evento!!.status == Status.ENCERRADO){
+        if (evento!!.status == Status.ENCERRADO) {
             binding.btnRegister.isEnabled = false
             binding.btnRegister.setBackgroundColor(Color.parseColor("#737373"))
         }
@@ -47,29 +48,18 @@ class InscricaoFragment : Fragment() {
             binding.nomeInst.setText(usuario.nome)
         }
 
-        Log.i("DATAS", "Data inicio ${evento.dataInicio.toString()}")
-        Log.i("DATAS", "Data Fim ${evento.dataFim.toString()}")
-        Log.i("DATAS", "Data cadastro ${evento.dataCadastro.toString()}")
-
-        val calendar = Calendar.getInstance()
-        calendar.time = evento.dataInicio
         binding.dataS.setText(
-            "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
-                "%02d".format(
-                    calendar.get(Calendar.MONTH) + 1
-                )
-            }/${calendar.get(Calendar.YEAR)}"
+            "${"%02d".format(LocalDate.parse(evento.dataInicio!!).dayOfMonth)}/${
+                "%02d".format(LocalDate.parse(evento.dataInicio!!).month + 1)
+            }/${LocalDate.parse(evento.dataInicio!!).year}"
         )
 
-        calendar.time = evento.dataFim
+
         binding.dataE.setText(
-            "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
-                "%02d".format(
-                    calendar.get(Calendar.MONTH) + 1
-                )
-            }/${calendar.get(Calendar.YEAR)}"
+            "${"%02d".format(LocalDate.parse(evento.dataFim!!).dayOfMonth)}/${
+                "%02d".format(LocalDate.parse(evento.dataFim!!).month + 1)
+            }/${LocalDate.parse(evento.dataFim!!).year}"
         )
-
 
 
         binding.categoria.setText(

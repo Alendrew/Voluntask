@@ -23,6 +23,7 @@ import com.example.voluntask.viewmodels.HomeViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.sql.Date
+import java.time.LocalDate
 import java.util.Calendar
 
 class Home2Fragment : Fragment() {
@@ -76,8 +77,8 @@ class Home2Fragment : Fragment() {
         var anoE = ""
         var mesE = ""
         var diaE = ""
-        var selectedDateStart: Date? = null
-        var selectedDateEnd: Date? = null
+        var selectedDateStart: LocalDate? = null
+        var selectedDateEnd: LocalDate? = null
         var selectedCategoria: Categorias? = null
         var selectedStatus: Status? = null
 
@@ -114,7 +115,7 @@ class Home2Fragment : Fragment() {
                             mesS = "%02d".format(monthOfYear + 1)
                             diaS = "%02d".format(dayOfMonth)
                             val date = "$diaS/$mesS/$anoS"
-                            selectedDateStart = Date.valueOf("$anoS-$mesS-$diaS")
+                            selectedDateStart = LocalDate.parse("$anoS-$mesS-$diaS")
                             dataPickerStart.setText(date)
                         },
                         mYear,
@@ -137,7 +138,7 @@ class Home2Fragment : Fragment() {
                             mesE = "%02d".format(monthOfYear + 1)
                             diaE = "%02d".format(dayOfMonth)
                             val date = "$diaE/$mesE/$anoE"
-                            selectedDateEnd = Date.valueOf("$anoE-$mesE-$diaE")
+                            selectedDateEnd = LocalDate.parse("$anoE-$mesE-$diaE")
                             dataPickerEnd.setText(date)
                         },
                         mYear,
@@ -149,25 +150,17 @@ class Home2Fragment : Fragment() {
 
 
             if (selectedDateStart != null) {
-                val calendar = Calendar.getInstance()
-                calendar.time = selectedDateStart!!
                 dataPickerStart.setText(
-                    "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
-                        "%02d".format(
-                            calendar.get(Calendar.MONTH) + 1
-                        )
-                    }/${calendar.get(Calendar.YEAR)}"
+                    "${"%02d".format(selectedDateStart!!.dayOfMonth)}/${
+                        "%02d".format(selectedDateStart!!.month + 1)
+                    }/${selectedDateStart!!.year}"
                 )
             }
             if (selectedDateEnd != null) {
-                val calendar = Calendar.getInstance()
-                calendar.time = selectedDateEnd!!
                 dataPickerEnd.setText(
-                    "${"%02d".format(calendar.get(Calendar.DAY_OF_MONTH))}/${
-                        "%02d".format(
-                            calendar.get(Calendar.MONTH) + 1
-                        )
-                    }/${calendar.get(Calendar.YEAR)}"
+                    "${"%02d".format(selectedDateEnd!!.dayOfMonth)}/${
+                        "%02d".format(selectedDateEnd!!.month + 1)
+                    }/${selectedDateEnd!!.year}"
                 )
             }
 
@@ -226,8 +219,8 @@ class Home2Fragment : Fragment() {
                     val filteredList = eventos.filter {
                         (selectedCategoria == null || it.categoria == selectedCategoria) &&
                                 (selectedStatus == null || it.status == selectedStatus) &&
-                                (selectedDateStart == null || it.dataInicio == selectedDateStart) &&
-                                (selectedDateEnd == null || it.dataFim == selectedDateEnd) &&
+                                (selectedDateStart == null || it.dataInicio == selectedDateStart.toString()) &&
+                                (selectedDateEnd == null || it.dataFim == selectedDateEnd.toString()) &&
                                 (selectedName == "" || it.nome == selectedName)
                     }
 

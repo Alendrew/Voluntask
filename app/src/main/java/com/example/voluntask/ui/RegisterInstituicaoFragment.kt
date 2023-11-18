@@ -19,6 +19,7 @@ import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
 import com.example.voluntask.viewmodels.AuthViewModel
 import java.time.Instant
+import java.time.LocalDate
 import java.util.Date
 
 
@@ -50,7 +51,7 @@ class RegisterInstituicaoFragment : Fragment() {
             val nomeResp = binding.inputNomeResp.text.toString()
             val cpfResp = binding.inputCpfResp.unMasked
             val confirmarSenha = binding.inputConfirmarSenha.text.toString()
-            val dataCadastro = Date.from(Instant.now())
+            val dataCadastro = LocalDate.now()
             val tipoConta = TipoConta.INSTITUICAO
 
             if (
@@ -81,7 +82,7 @@ class RegisterInstituicaoFragment : Fragment() {
             } else {
 
                 val instituicao =
-                    Instituicao(nome, nomeResp, telefone, tipoConta, cnpj, "", cpfResp, dataCadastro)
+                    Instituicao(nome, nomeResp, telefone, tipoConta, cnpj, "", cpfResp, "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}")
 
                 loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
                 loadingUI.btnToLoading()

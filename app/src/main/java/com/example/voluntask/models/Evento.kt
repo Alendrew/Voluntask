@@ -16,15 +16,15 @@ data class Evento(
     var localizacao:String,
     var descricao:String,
     var idInstituicao:String,
-    var dataInicio:LocalDate,
-    var dataFim: LocalDate,
-    var dataCadastro:LocalDate,
+    var dataInicio:String,
+    var dataFim: String,
+    var dataCadastro:String,
     var categoria:Categorias,
     var status:Status
 ): Parcelable, ConvertibleToMap {
 
-    constructor(): this("", "","","", LocalDate.now(),
-        LocalDate.now(), LocalDate.now(),Categorias.CARIDADE,Status.ENCERRADO)
+    constructor(): this("", "","","", "",
+        "", "",Categorias.CARIDADE,Status.ENCERRADO)
 
     var idEvento:String = ""
 
@@ -49,9 +49,9 @@ data class Evento(
                 val localizacao = getString("localizacao")!!
                 val descricao = getString("descricao")!!
                 val idInstituicao = getString("idInstituicao")!!
-                val dataHoraInicio = LocalDate.parse(getString("dataHoraInicio")!!)
-                val dataHoraFim = LocalDate.parse(getString("dataHoraFim")!!)
-                val dataCadastro = LocalDate.parse(getString("dataCadastro")!!)
+                val dataHoraInicio = getString("dataHoraInicio")!!
+                val dataHoraFim = getString("dataHoraFim")!!
+                val dataCadastro = getString("dataCadastro")!!
                 val categoria = Categorias.fromValue(getString("categoria")!!)
                 val status = Status.fromValue(getString("status")!!)
 
