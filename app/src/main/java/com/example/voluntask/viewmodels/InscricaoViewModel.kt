@@ -32,4 +32,10 @@ class InscricaoViewModel: ViewModel() {
             callback(FirebaseService<Inscricao>("Inscricoes").getAllInscricoes())
         }
     }
+
+    fun getInscricoesAndEventos(idUsuario: String, callback: (List<Evento>) -> Unit){
+        viewModelScope.launch {
+            callback(FirebaseService<Inscricao>("Inscricoes").getInscricoesAndEventos(idUsuario))
+        }
+    }
 }

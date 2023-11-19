@@ -35,13 +35,27 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
         }
     }
 
-    suspend fun getItemById(idItem: String): DocumentSnapshot? {
-        return try{
-            itemCollections.document(idItem).get().await()
-        }catch (e: Exception){
-            Log.e(TAG,"Error getting item by id", e)
-            null
+    suspend fun getInscricoesAndEventos(idUsuario: String): List<Evento> {
+        val eventosList: MutableList<Evento> = mutableListOf()
+        try {
+            val inscricoes = getAllInscricoes()
+            val eventosCollection = db.collection("Eventos")
+            val filteredInscricoes = inscricoes.filter {
+                (it.idUsuario == idUsuario)
+            }
+            for (inscricao in filteredInscricoes) {
+                val evento = eventosCollection.document(inscricao.idEvento).get().await()
+                if (evento != null){
+                    val itemConvertido = evento.toEvento()
+                    itemConvertido!!.idEvento = evento.id
+                    eventosList.add(itemConvertido)
+                }
+
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error getting inscricoes&Eventos", e)
         }
+        return eventosList
     }
 
     suspend fun deleteItem(idItem: String): Boolean {
@@ -85,7 +99,7 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             }
 
         } catch (e: Exception) {
-            Log.e(TAG,"Error getting user info", e)
+            Log.e(TAG, "Error getting user info", e)
         }
         return null
     }
@@ -112,10 +126,10 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
     suspend fun searchInscricaoByEvento(idEvento: String, idUsuario: String): Inscricao? {
         var eventoTemInscricoes: QuerySnapshot
         try {
-             eventoTemInscricoes = itemCollections.whereEqualTo("idEvento", idEvento).get().await()
-            if (eventoTemInscricoes.isEmpty){
+            eventoTemInscricoes = itemCollections.whereEqualTo("idEvento", idEvento).get().await()
+            if (eventoTemInscricoes.isEmpty) {
                 return null
-            }else{
+            } else {
                 val lista: MutableList<Inscricao> = mutableListOf()
                 for (registro in eventoTemInscricoes) {
                     val itemConvertido = registro.toInscricao()
@@ -131,7 +145,7 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             }
 
         } catch (e: Exception) {
-            Log.e(TAG,"Error getting user info", e)
+            Log.e(TAG, "Error getting user info", e)
         }
         return null
     }

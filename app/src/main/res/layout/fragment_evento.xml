@@ -25,12 +25,15 @@
             android:layout_height="15dp" />
 
         <TextView
+            android:id="@+id/h1"
+            tools:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Criar novo evento"
             android:textAlignment="center"
             android:textColor="#4E4E4E"
             android:textSize="32sp"
+            android:visibility="gone"
             android:textStyle="normal" />
 
         <Space
@@ -184,6 +187,7 @@
                 android:visibility="gone" />
 
             <Button
+                tools:visibility="visible"
                 android:id="@+id/btnRegister"
                 android:layout_width="271dp"
                 android:layout_height="48dp"
@@ -191,13 +195,8 @@
                 android:text="Cadastrar"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
-
-        <Space
-            android:layout_width="271dp"
-            android:layout_height="15dp"
-            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/btnExcluirEvento"

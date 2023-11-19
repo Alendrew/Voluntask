@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -47,6 +48,11 @@ class HomeFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
 
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+        }
+
+
         binding.btnMeus.setOnClickListener {
             Navigation.findNavController(binding.root)
                 .navigate(R.id.action_homeFragment_to_home2Fragment)
@@ -55,20 +61,18 @@ class HomeFragment : Fragment() {
 
         val adapter = EventoAdapter {
             sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                val bundle = bundleOf("evento" to it)
                 if (usuario.tipoConta == TipoConta.VOLUNTARIO) {
-                    val bundle = bundleOf("evento" to it)
                     Navigation.findNavController(binding.root)
                         .navigate(R.id.action_homeFragment_to_inscricaoFragment, bundle)
                 } else {
-//                    editar evento
-//                    Navigation.findNavController(binding.root)
-//                        .navigate(R.id.action_homeFragment_to_inscricaoFragment)
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_homeFragment_to_EventoFragment, bundle)
                 }
             }
         }
 
-        sharedViewModel.usuario.observe(viewLifecycleOwner)
-        { usuario ->
+        sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
             var eventosList: List<Evento>? = null
             viewModel.getAllEventos { eventos ->
                 eventosList = eventos
@@ -210,14 +214,14 @@ class HomeFragment : Fragment() {
             if (selectedDateStart != null) {
                 dataPickerStart.setText(
                     "${"%02d".format(selectedDateStart!!.dayOfMonth)}/${
-                        "%02d".format(selectedDateStart!!.month + 1)
+                        "%02d".format(selectedDateStart!!.month.value + 1)
                     }/${selectedDateStart!!.year}"
                 )
             }
             if (selectedDateEnd != null) {
                 dataPickerEnd.setText(
                     "${"%02d".format(selectedDateEnd!!.dayOfMonth)}/${
-                        "%02d".format(selectedDateEnd!!.month + 1)
+                        "%02d".format(selectedDateEnd!!.month.value + 1)
                     }/${selectedDateEnd!!.year}"
                 )
             }

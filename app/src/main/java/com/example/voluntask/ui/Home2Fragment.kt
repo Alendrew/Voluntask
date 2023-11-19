@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,9 +18,12 @@ import com.example.voluntask.R
 import com.example.voluntask.adapters.EventoAdapter
 import com.example.voluntask.databinding.FragmentHome2Binding
 import com.example.voluntask.models.Evento
+import com.example.voluntask.models.Evento.Companion.toEvento
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.viewmodels.EventoViewModel
+import com.example.voluntask.viewmodels.InscricaoViewModel
 import com.example.voluntask.viewmodels.SharedViewModel
 import com.google.android.material.textfield.TextInputEditText
 import java.time.LocalDate
@@ -43,7 +47,12 @@ class Home2Fragment : Fragment() {
     ): View {
         binding = FragmentHome2Binding.inflate(inflater, container, false)
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[InscricaoViewModel::class.java]
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_home2Fragment_to_homeFragment)
+        }
 
         binding.btnDisponiveis.setOnClickListener {
             Navigation.findNavController(binding.root)
@@ -56,17 +65,24 @@ class Home2Fragment : Fragment() {
                 .navigate(R.id.action_home2Fragment_to_inscricaoFragment, bundle)
         }
 
-        viewModel.getAllEventos { eventos ->
-            adapter.setEventoList(eventos)
-        }
-
-
-
-
         binding.recyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.recyclerView.adapter = adapter
 
+        sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+            binding.swipeRefreshLayout.isRefreshing = true
+
+            // Chame a função assíncrona para obter os dados
+            viewModel.getInscricoesAndEventos(usuario.idUsuario) { inscricoesAndEventos ->
+                // Este código será executado quando a função assíncrona for concluída
+
+                // Atualize o RecyclerView com os dados
+                adapter.setEventoList(inscricoesAndEventos)
+
+                // Oculte a tela de carregamento depois de atualizar o RecyclerView
+                binding.swipeRefreshLayout.isRefreshing = false
+            }
+        }
 
         var selectedCategoriaPosition: Int = -1
         var selectedStatusPosition: Int = -1
@@ -82,9 +98,6 @@ class Home2Fragment : Fragment() {
         var selectedDateEnd: LocalDate? = null
         var selectedCategoria: Categorias? = null
         var selectedStatus: Status? = null
-
-
-        // TODO: CHAMAR INSCRIÇÕES E NÃO EVENTOS NORMAIS 
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             val eventos: List<Evento> = adapter.getItems()
@@ -170,14 +183,14 @@ class Home2Fragment : Fragment() {
             if (selectedDateStart != null) {
                 dataPickerStart.setText(
                     "${"%02d".format(selectedDateStart!!.dayOfMonth)}/${
-                        "%02d".format(selectedDateStart!!.month + 1)
+                        "%02d".format(selectedDateStart!!.month.value + 1)
                     }/${selectedDateStart!!.year}"
                 )
             }
             if (selectedDateEnd != null) {
                 dataPickerEnd.setText(
                     "${"%02d".format(selectedDateEnd!!.dayOfMonth)}/${
-                        "%02d".format(selectedDateEnd!!.month + 1)
+                        "%02d".format(selectedDateEnd!!.month.value + 1)
                     }/${selectedDateEnd!!.year}"
                 )
             }
@@ -263,8 +276,11 @@ class Home2Fragment : Fragment() {
                     dataPickerStart.setText("")
                     dataPickerEnd.setText("")
                     selectedName = ""
-                    viewModel.getAllEventos { eventos ->
-                        adapter.setEventoList(eventos)
+                    sharedViewModel.usuario.observe(viewLifecycleOwner)
+                    { usuario ->
+                        viewModel.getInscricoesAndEventos(usuario.idUsuario) { inscricoesAndEventos ->
+                            adapter.setEventoList(inscricoesAndEventos)
+                        }
                     }
                 }
                 .create()

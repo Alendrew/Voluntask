@@ -41,6 +41,7 @@ class EventoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEventoBinding.inflate(inflater, container, false)
+        val evento = arguments?.getParcelable<Evento>("evento")
         val viewModel = ViewModelProvider(this)[EventoViewModel::class.java]
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
@@ -50,7 +51,10 @@ class EventoFragment : Fragment() {
         var anoE = ""
         var mesE = ""
         var diaE = ""
-        var categoria: Categorias = Categorias.CARIDADE
+        var selectedDateStart: LocalDate? = null
+        var selectedDateEnd: LocalDate? = null
+
+        val categoria: Categorias = Categorias.CARIDADE
         val customToast = CustomToast(binding.customToast, requireContext())
         var loadingUI: LoadingUI
 
@@ -58,6 +62,64 @@ class EventoFragment : Fragment() {
         val adapterCategoria =
             ArrayAdapter(requireContext(), R.layout.list_item, optionsCategoria)
         binding.inputCategoria.setAdapter(adapterCategoria)
+
+        if (evento != null) {
+            binding.h1.text = "Editar Evento"
+            binding.btnRegister.text = "Salvar"
+            binding.inputStatusLayout.visibility = View.VISIBLE
+            binding.inputNome.setText(evento.nome)
+            binding.inputLocal.setText(evento.localizacao)
+            binding.inputDesc.setText(evento.descricao)
+            val dataInicio = LocalDate.parse(evento.dataInicio.toString())
+            val dataFim = LocalDate.parse(evento.dataFim.toString())
+
+            val optionsStatus = listOf("Ativo", "Encerrado")
+            val adapterStatus =
+                ArrayAdapter(requireContext(), R.layout.list_item, optionsStatus)
+            binding.inputStatus.setAdapter(adapterStatus)
+
+            val selectedCategoriaPosition = when (evento.categoria) {
+                Categorias.DOACAO -> 0
+                Categorias.LIMPEZA -> 1
+                Categorias.CARIDADE -> 2
+            }
+
+            val selectedStatusPosition = when (evento.status) {
+                Status.ATIVO -> 0
+                Status.ENCERRADO -> 1
+            }
+
+            binding.inputCategoria.setText(
+                binding.inputCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false
+            );
+
+            binding.inputStatus.setText(
+                binding.inputStatus.adapter.getItem(selectedStatusPosition).toString(), false
+            );
+
+            diaS = dataInicio.dayOfMonth.toString()
+            mesS = dataInicio.month.value .toString()
+            anoS = dataInicio.year.toString()
+            diaE = dataFim.dayOfMonth.toString()
+            mesE = dataFim.month.value.toString()
+            anoE = dataFim.year.toString()
+
+
+            binding.inputDataS.setText(
+                "${"%02d".format(dataInicio.dayOfMonth)}/${
+                    "%02d".format(dataInicio.month.value)
+                }/${dataInicio.year}"
+            )
+
+
+            binding.inputDataE.setText(
+                "${"%02d".format(dataFim.dayOfMonth)}/${
+                    "%02d".format(dataFim.month.value)
+                }/${dataFim.year}"
+            )
+        }
+        binding.h1.visibility = View.VISIBLE
+        binding.btnRegister.visibility = View.VISIBLE
 
         binding.inputDataS.setOnClickListener(View.OnClickListener { // calender class's instance and get current date , month and year from calender
             val c: Calendar = Calendar.getInstance()
@@ -103,19 +165,6 @@ class EventoFragment : Fragment() {
             }?.show()
         })
 
-
-        binding.inputCategoria.setOnItemClickListener { _, _, position, _ ->
-            val selectedItem = when (position) {
-                0 -> "DOACAO"
-                1 -> "LIMPEZA"
-                2 -> "CARIDADE"
-                else -> ""
-            }
-            categoria = Categorias.fromValue(selectedItem)
-        }
-
-
-
         binding.btnRegister.setOnClickListener {
             val nome = binding.inputNome.text.toString()
             val localizacao = binding.inputLocal.text.toString()
@@ -132,7 +181,10 @@ class EventoFragment : Fragment() {
                 binding.inputCategoria.text.toString().isBlank() ||
                 dataE.isBlank()
             ) {
-                customToast.showCustomToast("Todos os campos precisam ser preenchidos", Types.WARNING)
+                customToast.showCustomToast(
+                    "Todos os campos precisam ser preenchidos",
+                    Types.WARNING
+                )
             } else {
 
                 var userInfo: Usuario? = null
@@ -141,27 +193,77 @@ class EventoFragment : Fragment() {
                     userInfo = usuario
                 }
 
-                val evento =
-                    Evento(nome, localizacao, descricao, userInfo!!.idUsuario, "$anoS-$mesS-$diaS", "$anoE-$mesE-$diaE", "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}", categoria, Status.ATIVO)
+                var newEvento: Evento? = null
 
-                loadingUI = LoadingUI(binding.btnRegister,binding.progressCircular,null)
-                loadingUI.btnToLoading()
-                viewModel.createEvento(evento) {
-                    if (it) {
-                        customToast.showCustomToast("Evento criado com sucesso", Types.SUCESS)
-                        val delayMillis = 2000L // 2 segundos
+                newEvento = if (evento == null) {
+                    Evento(
+                        nome,
+                        localizacao,
+                        descricao,
+                        userInfo!!.idUsuario,
+                        "$anoS-$mesS-$diaS",
+                        "$anoE-$mesE-$diaE",
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        categoria,
+                        Status.ATIVO
+                    )
+                } else {
+                    Evento(
+                        nome,
+                        localizacao,
+                        descricao,
+                        userInfo!!.idUsuario,
+                        "$anoS-$mesS-$diaS",
+                        "$anoE-$mesE-$diaE",
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        categoria,
+                        Status.fromValue(binding.inputStatus.text.toString())
+                    )
+                }
+                if (evento == null) {
+                    loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
+                    loadingUI.btnToLoading()
+                    viewModel.createEvento(newEvento) {
+                        if (it) {
+                            customToast.showCustomToast("Evento criado com sucesso", Types.SUCESS)
+                            val delayMillis = 2000L // 2 segundos
 
-                        // Use um Handler para ocultar a Toast após o atraso
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_EventoFragment_to_homeFragment)
-                        }, delayMillis)
-                    } else {
-                        // O registro não foi bem-sucedido
-                        loadingUI.loadingToBtn()
-                        customToast.showCustomToast("Erro ao criar evento", Types.ERROR)
+                            // Use um Handler para ocultar a Toast após o atraso
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                Navigation.findNavController(binding.root)
+                                    .navigate(R.id.action_EventoFragment_to_homeFragment)
+                            }, delayMillis)
+                        } else {
+                            // O registro não foi bem-sucedido
+                            loadingUI.loadingToBtn()
+                            customToast.showCustomToast("Erro ao criar evento", Types.ERROR)
+                        }
+                    }
+                } else {
+                    loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
+                    loadingUI.btnToLoading()
+                    newEvento.idEvento = evento.idEvento
+                    viewModel.updateEvento(newEvento) {
+                        if (it) {
+                            customToast.showCustomToast(
+                                "Evento atualizado com sucesso",
+                                Types.SUCESS
+                            )
+                            val delayMillis = 2000L // 2 segundos
+
+                            // Use um Handler para ocultar a Toast após o atraso
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                Navigation.findNavController(binding.root)
+                                    .navigate(R.id.action_EventoFragment_to_homeFragment)
+                            }, delayMillis)
+                        } else {
+                            // O registro não foi bem-sucedido
+                            loadingUI.loadingToBtn()
+                            customToast.showCustomToast("Erro ao atualizar evento", Types.ERROR)
+                        }
                     }
                 }
+
             }
 
         }
