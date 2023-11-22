@@ -24,6 +24,28 @@ class AuthViewModel : ViewModel() {
         }
     }
 
+    fun updateUser(idUsuario: String, usuario: Usuario, callback: (Boolean) -> Unit) {
+        val collection = when (usuario) {
+            is Voluntario -> "Voluntarios"
+            is Instituicao -> "Instituicoes"
+            else -> ""
+        }
+        viewModelScope.launch {
+            callback(FirebaseService<Usuario>(collection).updateItem(idUsuario, usuario))
+        }
+    }
+
+    fun deleteUser(usuario: Usuario, callback: (Boolean) -> Unit){
+        val collection = when (usuario) {
+            is Voluntario -> "Voluntarios"
+            is Instituicao -> "Instituicoes"
+            else -> ""
+        }
+        viewModelScope.launch {
+            callback(FirebaseService<Usuario>(collection).deleteUser(usuario))
+        }
+    }
+
     fun forget(email: String, callback: (Resultado) -> Unit) {
         viewModelScope.launch {
             callback(FirebaseService.forgetPassword(email))

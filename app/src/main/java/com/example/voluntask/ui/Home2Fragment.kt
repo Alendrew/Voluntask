@@ -49,10 +49,10 @@ class Home2Fragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         val viewModel = ViewModelProvider(this)[InscricaoViewModel::class.java]
 
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            Navigation.findNavController(binding.root)
-                .navigate(R.id.action_home2Fragment_to_homeFragment)
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this) {
+//            Navigation.findNavController(binding.root)
+//                .navigate(R.id.action_home2Fragment_to_homeFragment)
+//        }
 
         binding.btnDisponiveis.setOnClickListener {
             Navigation.findNavController(binding.root)
@@ -276,10 +276,18 @@ class Home2Fragment : Fragment() {
                     dataPickerStart.setText("")
                     dataPickerEnd.setText("")
                     selectedName = ""
-                    sharedViewModel.usuario.observe(viewLifecycleOwner)
-                    { usuario ->
+                    sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                        binding.swipeRefreshLayout.isRefreshing = true
+
+                        // Chame a função assíncrona para obter os dados
                         viewModel.getInscricoesAndEventos(usuario.idUsuario) { inscricoesAndEventos ->
+                            // Este código será executado quando a função assíncrona for concluída
+
+                            // Atualize o RecyclerView com os dados
                             adapter.setEventoList(inscricoesAndEventos)
+
+                            // Oculte a tela de carregamento depois de atualizar o RecyclerView
+                            binding.swipeRefreshLayout.isRefreshing = false
                         }
                     }
                 }

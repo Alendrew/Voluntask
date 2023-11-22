@@ -65,7 +65,8 @@ class LoginFragment : Fragment() {
                 viewModel.login(email, senha) { resultado ->
                     if (resultado.result) {
                         viewModel.getUserInfo(resultado.user!!.uid.toString()) { usuario ->
-                            sharedViewModel.setUser(usuario!!)
+                            usuario!!.email = email
+                            sharedViewModel.setUser(usuario)
                             Navigation.findNavController(binding.root)
                                 .navigate(R.id.action_loginFragment_to_homeFragment)
                         }
@@ -79,7 +80,7 @@ class LoginFragment : Fragment() {
 
         binding.btnRegister.setOnClickListener {
             Navigation.findNavController(binding.root)
-                .navigate(R.id.action_loginFragment_to_escolherContaFragment)
+                .navigate(R.id.action_loginFragment_to_termosFragment)
         }
 
         binding.btnForgot.setOnClickListener {

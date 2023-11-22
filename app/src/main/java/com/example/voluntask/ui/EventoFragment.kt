@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
@@ -17,6 +18,7 @@ import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
 import com.example.voluntask.models.enums.Status
+import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
 import com.example.voluntask.util.LoadingUI
 import com.example.voluntask.util.Types
@@ -67,6 +69,7 @@ class EventoFragment : Fragment() {
             binding.h1.text = "Editar Evento"
             binding.btnRegister.text = "Salvar"
             binding.inputStatusLayout.visibility = View.VISIBLE
+            binding.btnExcluirEvento.visibility = View.VISIBLE
             binding.inputNome.setText(evento.nome)
             binding.inputLocal.setText(evento.localizacao)
             binding.inputDesc.setText(evento.descricao)
@@ -165,6 +168,13 @@ class EventoFragment : Fragment() {
             }?.show()
         })
 
+
+        binding.btnExcluirEvento.setOnClickListener {
+            val bundle = bundleOf("evento" to evento)
+            Navigation.findNavController(binding.root)
+                .navigate(R.id.action_EventoFragment_to_confirmarExcluirFragment, bundle)
+        }
+
         binding.btnRegister.setOnClickListener {
             val nome = binding.inputNome.text.toString()
             val localizacao = binding.inputLocal.text.toString()
@@ -193,32 +203,19 @@ class EventoFragment : Fragment() {
                     userInfo = usuario
                 }
 
-                var newEvento: Evento? = null
-
-                newEvento = if (evento == null) {
-                    Evento(
-                        nome,
-                        localizacao,
-                        descricao,
-                        userInfo!!.idUsuario,
-                        "$anoS-$mesS-$diaS",
-                        "$anoE-$mesE-$diaE",
-                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
-                        categoria,
-                        Status.ATIVO
-                    )
-                } else {
-                    Evento(
-                        nome,
-                        localizacao,
-                        descricao,
-                        userInfo!!.idUsuario,
-                        "$anoS-$mesS-$diaS",
-                        "$anoE-$mesE-$diaE",
-                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
-                        categoria,
-                        Status.fromValue(binding.inputStatus.text.toString())
-                    )
+                val newEvento = Evento(
+                    nome,
+                    localizacao,
+                    descricao,
+                    userInfo!!.idUsuario,
+                    "$anoS-$mesS-$diaS",
+                    "$anoE-$mesE-$diaE",
+                    "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                    categoria,
+                    Status.ATIVO
+                )
+                if (evento != null) {
+                    newEvento.status = Status.fromValue(binding.inputStatus.text.toString())
                 }
                 if (evento == null) {
                     loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)

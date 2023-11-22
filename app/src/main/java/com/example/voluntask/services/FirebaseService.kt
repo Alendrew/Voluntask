@@ -1,8 +1,8 @@
 package com.example.voluntask.services
 
 import android.util.Log
-import com.example.voluntask.models.Evento.Companion.toEvento
 import com.example.voluntask.models.Evento
+import com.example.voluntask.models.Evento.Companion.toEvento
 import com.example.voluntask.models.Inscricao
 import com.example.voluntask.models.Inscricao.Companion.toInscricao
 import com.example.voluntask.models.Instituicao
@@ -11,11 +11,11 @@ import com.example.voluntask.models.Voluntario
 import com.example.voluntask.models.interfaces.ConvertibleToMap
 import com.example.voluntask.util.Resultado
 import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
@@ -45,7 +45,7 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             }
             for (inscricao in filteredInscricoes) {
                 val evento = eventosCollection.document(inscricao.idEvento).get().await()
-                if (evento != null){
+                if (evento.exists()){
                     val itemConvertido = evento.toEvento()
                     itemConvertido!!.idEvento = evento.id
                     eventosList.add(itemConvertido)
@@ -56,6 +56,19 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             Log.e(TAG, "Error getting inscricoes&Eventos", e)
         }
         return eventosList
+    }
+
+    suspend fun deleteUser(usuario: Usuario): Boolean{
+        return try {
+            val user: FirebaseUser? = auth.currentUser
+            user?.delete()?.await()
+            itemCollections.document(usuario.idInfoConta).delete().await()
+            auth.signOut()
+            true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error deleting user", e)
+            false
+        }
     }
 
     suspend fun deleteItem(idItem: String): Boolean {
@@ -93,9 +106,13 @@ class FirebaseService<T : ConvertibleToMap>(private val collectionPath: String) 
             val tipoConta = userInfo.documents[0].getString("tipoConta")
 
             return if (tipoConta == "VOLUNTARIO") {
-                userInfo.documents[0].toObject(Voluntario::class.java)
+                val usuario = userInfo.documents[0].toObject(Voluntario::class.java)
+                usuario!!.idInfoConta = userInfo.documents[0].id
+                usuario
             } else {
-                userInfo.documents[0].toObject(Instituicao::class.java)
+                val usuario = userInfo.documents[0].toObject(Instituicao::class.java)
+                usuario!!.idInfoConta = userInfo.documents[0].id
+                usuario
             }
 
         } catch (e: Exception) {

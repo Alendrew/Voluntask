@@ -8,6 +8,7 @@
     <string name="choose_gender_prompt">Escolha um gênero</string>
     <string name="lorem_ipsum">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s</string>
     <string name="Cadastrar">Ainda não tem uma conta? <font color='#6F70B5'>Cadastre-se</font></string>
+    <string name="Termos">Li e aceito os termos de uso</string>
 
     <string-array name="genders">
         <item>Masculino</item>

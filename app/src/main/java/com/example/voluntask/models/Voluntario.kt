@@ -23,7 +23,8 @@ data class Voluntario(
 
     constructor(): this("","", "",TipoConta.VOLUNTARIO,"", "","",Generos.PREFIRO_NAO_DIZER)
 
-    var idInfoConta: String = ""
+    override var idInfoConta: String = ""
+    override var email: String = ""
 
     override fun toMap(): Map<String, Any?> {
         return mapOf(

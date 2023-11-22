@@ -13,6 +13,7 @@
         android:background="#BABBFF">
 
         <ImageView
+            android:id="@+id/btnPerfil"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_gravity="start|center"

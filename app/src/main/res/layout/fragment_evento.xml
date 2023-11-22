@@ -198,12 +198,18 @@
                 android:visibility="gone" />
         </LinearLayout>
 
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center" />
+
         <TextView
             android:id="@+id/btnExcluirEvento"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Excluir evento"
             android:visibility="gone"
+            tools:visibility="visible"
             android:layout_gravity="center"
             />
     </LinearLayout>

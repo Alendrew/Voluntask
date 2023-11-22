@@ -23,6 +23,7 @@
             android:layout_height="20dp" />
 
         <LinearLayout
+            android:id="@+id/steps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -46,7 +47,9 @@
             android:layout_height="10dp" />
 
         <TextView
-            android:id="@+id/textView7"
+            tools:visibility="visible"
+            android:visibility="gone"
+            android:id="@+id/h1"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +60,8 @@
             android:textStyle="normal|bold" />
 
 
-        <Space
+        <android.widget.Space
+            android:id="@+id/topSpace"
             android:layout_width="271dp"
             android:layout_height="10dp"
             android:layout_gravity="center" />
@@ -90,6 +94,7 @@
             android:hint="E-mail" >
 
             <com.google.android.material.textfield.TextInputEditText
+                android:drawableRight="@drawable/baseline_block_24"
                 android:id="@+id/inputEmail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -221,8 +226,6 @@
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
-
         <Space
             android:layout_width="271dp"
             android:layout_height="10dp"
@@ -241,15 +244,31 @@
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/btnRegister"
+                tools:visibility="visible"
+                android:id="@+id/btnCadastrar"
                 android:layout_width="271dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:text="Cadastrar"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:visibility="visible" />
+                android:visibility="gone" />
         </LinearLayout>
+
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="13dp"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/btnExcluirPerfil"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Excluir perfil"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 
     <TextView

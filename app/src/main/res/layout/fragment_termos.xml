@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".ui.HomeFragment">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="200dp"
+            android:layout_height="140dp"
+            android:layout_gravity="center"
+            android:src="@drawable/logo" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Termos de uso"
+            android:textAlignment="center"
+            android:textColor="#4E4E4E"
+            android:textSize="32sp"
+            android:textStyle="normal" />
+
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:src="@drawable/termos"
+            />
+
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+      <LinearLayout
+          android:id="@+id/Layoutcheckbox"
+          android:layout_width="271dp"
+          android:layout_gravity="center"
+          android:gravity="center_vertical"
+          android:layout_height="wrap_content">
+
+          <CheckBox
+              android:id="@+id/checkbox"
+              android:clickable="false"
+              android:focusable="false"
+              android:layout_marginStart="10dp"
+              android:layout_width="34dp"
+              android:layout_height="34dp"/>
+
+          <TextView
+              android:textAlignment="textEnd"
+              android:textSize="17sp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Li e aceito os termos de uso"
+              />
+      </LinearLayout>
+
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center" />
+
+
+        <Button
+            android:id="@+id/btnTermos"
+            android:layout_width="271dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:text="Termos de uso"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:drawableRight="@drawable/baseline_link_24"
+            android:drawableLeft="@drawable/baseline_link_24"
+            android:backgroundTint="#03A9F4"
+            android:visibility="visible" />
+
+        <Space
+            android:layout_width="271dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center" />
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/btnAceitar"
+                android:layout_width="271dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:text="Continuar"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:backgroundTint="#737373"
+                android:visibility="visible" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,4 +27,10 @@ class EventoViewModel: ViewModel() {
         }
     }
 
+    fun deleteEvento(idEvento: String, callback: (Boolean) -> Unit){
+        viewModelScope.launch {
+            callback(FirebaseService<Evento>("Eventos").deleteItem(idEvento))
+        }
+    }
+
 }

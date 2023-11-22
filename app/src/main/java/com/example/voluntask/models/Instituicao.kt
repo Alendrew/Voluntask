@@ -22,6 +22,9 @@ data class Instituicao(
 
     constructor(): this("","","",TipoConta.INSTITUICAO,"","","", "")
 
+
+    override var idInfoConta: String = ""
+    override var email: String = ""
     override fun toMap(): Map<String, Any?> {
         return mapOf(
             "nome" to nome,

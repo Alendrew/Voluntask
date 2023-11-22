@@ -58,6 +58,19 @@ class HomeFragment : Fragment() {
                 .navigate(R.id.action_homeFragment_to_home2Fragment)
         }
 
+        binding.btnPerfil.setOnClickListener {
+            sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                val bundle = bundleOf("usuario" to usuario)
+                if (usuario.tipoConta == TipoConta.VOLUNTARIO) {
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_homeFragment_to_registerVoluntarioFragment, bundle)
+                } else {
+                    Navigation.findNavController(binding.root)
+                        .navigate(R.id.action_homeFragment_to_registerInstituicaoFragment, bundle)
+                }
+            }
+        }
+
 
         val adapter = EventoAdapter {
             sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
