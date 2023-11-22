@@ -17,6 +17,7 @@ import com.example.voluntask.databinding.FragmentEventoBinding
 import com.example.voluntask.models.Evento
 import com.example.voluntask.models.Usuario
 import com.example.voluntask.models.enums.Categorias
+import com.example.voluntask.models.enums.Generos
 import com.example.voluntask.models.enums.Status
 import com.example.voluntask.models.enums.TipoConta
 import com.example.voluntask.util.CustomToast
@@ -53,10 +54,9 @@ class EventoFragment : Fragment() {
         var anoE = ""
         var mesE = ""
         var diaE = ""
-        var selectedDateStart: LocalDate? = null
-        var selectedDateEnd: LocalDate? = null
 
-        val categoria: Categorias = Categorias.CARIDADE
+        var categoria: Categorias = Categorias.CARIDADE
+        var status: Status = Status.ATIVO
         val customToast = CustomToast(binding.customToast, requireContext())
         var loadingUI: LoadingUI
 
@@ -86,22 +86,35 @@ class EventoFragment : Fragment() {
                 Categorias.LIMPEZA -> 1
                 Categorias.CARIDADE -> 2
             }
+            val selectedItem = when (selectedCategoriaPosition) {
+                0 -> "DOACAO"
+                1 -> "LIMPEZA"
+                2 -> "CARIDADE"
+                else -> ""
+            }
+            categoria = Categorias.fromValue(selectedItem)
+
+            binding.inputCategoria.setText(
+                binding.inputCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false
+            );
 
             val selectedStatusPosition = when (evento.status) {
                 Status.ATIVO -> 0
                 Status.ENCERRADO -> 1
             }
-
-            binding.inputCategoria.setText(
-                binding.inputCategoria.adapter.getItem(selectedCategoriaPosition).toString(), false
-            );
+            val selectedStatusItem = when (selectedStatusPosition) {
+                0 -> "ATIVO"
+                1 -> "ENCERRADO"
+                else -> ""
+            }
+            status = Status.fromValue(selectedStatusItem)
 
             binding.inputStatus.setText(
                 binding.inputStatus.adapter.getItem(selectedStatusPosition).toString(), false
             );
 
             diaS = dataInicio.dayOfMonth.toString()
-            mesS = dataInicio.month.value .toString()
+            mesS = dataInicio.month.value.toString()
             anoS = dataInicio.year.toString()
             diaE = dataFim.dayOfMonth.toString()
             mesE = dataFim.month.value.toString()
@@ -168,6 +181,25 @@ class EventoFragment : Fragment() {
             }?.show()
         })
 
+        binding.inputCategoria.setOnItemClickListener { _, _, position, _ ->
+            val selectedItem = when (position) {
+                0 -> "DOACAO"
+                1 -> "LIMPEZA"
+                2 -> "CARIDADE"
+                else -> ""
+            }
+            categoria = Categorias.fromValue(selectedItem)
+        }
+
+        binding.inputStatus.setOnItemClickListener { _, _, position, _ ->
+            val selectedItem = when (position) {
+                0 -> "ATIVO"
+                1 -> "ENCERRADO"
+                else -> ""
+            }
+            status = Status.fromValue(selectedItem)
+        }
+
 
         binding.btnExcluirEvento.setOnClickListener {
             val bundle = bundleOf("evento" to evento)
@@ -183,41 +215,37 @@ class EventoFragment : Fragment() {
             val dataE = binding.inputDataE.text.toString()
             val dataCadastro = LocalDate.now()
 
-            if (
-                nome.isBlank() ||
-                localizacao.isBlank() ||
-                descricao.isBlank() ||
-                dataS.isBlank() ||
-                binding.inputCategoria.text.toString().isBlank() ||
-                dataE.isBlank()
-            ) {
-                customToast.showCustomToast(
-                    "Todos os campos precisam ser preenchidos",
-                    Types.WARNING
-                )
-            } else {
+            var userInfo: Usuario? = null
 
-                var userInfo: Usuario? = null
+            sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+                userInfo = usuario
+            }
 
-                sharedViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
-                    userInfo = usuario
-                }
-
-                val newEvento = Evento(
-                    nome,
-                    localizacao,
-                    descricao,
-                    userInfo!!.idUsuario,
-                    "$anoS-$mesS-$diaS",
-                    "$anoE-$mesE-$diaE",
-                    "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
-                    categoria,
-                    Status.ATIVO
-                )
-                if (evento != null) {
-                    newEvento.status = Status.fromValue(binding.inputStatus.text.toString())
-                }
-                if (evento == null) {
+            if (evento == null) {
+                if (
+                    nome.isBlank() ||
+                    localizacao.isBlank() ||
+                    descricao.isBlank() ||
+                    dataS.isBlank() ||
+                    binding.inputCategoria.text.toString().isBlank() ||
+                    dataE.isBlank()
+                ) {
+                    customToast.showCustomToast(
+                        "Todos os campos precisam ser preenchidos",
+                        Types.WARNING
+                    )
+                } else {
+                    val newEvento = Evento(
+                        nome,
+                        localizacao,
+                        descricao,
+                        userInfo!!.idUsuario,
+                        "$anoS-$mesS-$diaS",
+                        "$anoE-$mesE-$diaE",
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        categoria,
+                        status
+                    )
                     loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
                     loadingUI.btnToLoading()
                     viewModel.createEvento(newEvento) {
@@ -236,9 +264,35 @@ class EventoFragment : Fragment() {
                             customToast.showCustomToast("Erro ao criar evento", Types.ERROR)
                         }
                     }
+                }
+            } else {
+                if (
+                    nome.isBlank() ||
+                    localizacao.isBlank() ||
+                    descricao.isBlank() ||
+                    dataS.isBlank() ||
+                    dataE.isBlank()
+                ) {
+                    customToast.showCustomToast(
+                        "Todos os campos precisam ser preenchidos",
+                        Types.WARNING
+                    )
                 } else {
                     loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
                     loadingUI.btnToLoading()
+                    val newEvento = Evento(
+                        nome,
+                        localizacao,
+                        descricao,
+                        userInfo!!.idUsuario,
+                        "$anoS-$mesS-$diaS",
+                        "$anoE-$mesE-$diaE",
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        categoria,
+                        status
+                    )
+                    loadingUI.btnToLoading()
+                    binding.btnExcluirEvento.visibility = View.GONE
                     newEvento.idEvento = evento.idEvento
                     viewModel.updateEvento(newEvento) {
                         if (it) {
@@ -256,13 +310,12 @@ class EventoFragment : Fragment() {
                         } else {
                             // O registro não foi bem-sucedido
                             loadingUI.loadingToBtn()
+                            binding.btnExcluirEvento.visibility = View.VISIBLE
                             customToast.showCustomToast("Erro ao atualizar evento", Types.ERROR)
                         }
                     }
                 }
-
             }
-
         }
 
         return binding.root

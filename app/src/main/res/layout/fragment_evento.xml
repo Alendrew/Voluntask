@@ -78,7 +78,7 @@
             android:id="@+id/inputDescLayout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="271dp"
-            android:layout_height="130dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             android:hint="Descrição">
 

@@ -213,6 +213,37 @@ class RegisterVoluntarioFragment : Fragment() {
                     customToast.showCustomToast("Número de telefone inválido", Types.ERROR)
                 } else if (idade < 18) {
                     customToast.showCustomToast("Idade menor que 18 anos", Types.ERROR)
+                } else {
+                    val newVoluntario = Voluntario(
+                        nome,
+                        telefone,
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        tipoConta,
+                        "",
+                        "$ano-$mes-$dia",
+                        cpf,
+                        genero
+                    )
+                    loadingUI = LoadingUI(binding.btnCadastrar, binding.progressCircular, null)
+                    loadingUI.btnToLoading()
+                    if (usuario == null) {
+                        viewModel.register(newVoluntario, email, senha) {
+                            if (it.result) {
+                                customToast.showCustomToast(it.msg, Types.SUCESS)
+                                val delayMillis = 2000L // 2 segundos
+
+                                // Use um Handler para ocultar a Toast após o atraso
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    Navigation.findNavController(binding.root)
+                                        .navigate(R.id.action_registerVoluntarioFragment_to_loginFragment)
+                                }, delayMillis)
+                            } else {
+                                // O registro não foi bem-sucedido
+                                loadingUI.loadingToBtn()
+                                customToast.showCustomToast(it.msg, Types.ERROR)
+                            }
+                        }
+                    }
                 }
             } else {
                 if (
@@ -237,63 +268,46 @@ class RegisterVoluntarioFragment : Fragment() {
                     customToast.showCustomToast("Número de telefone inválido", Types.ERROR)
                 } else if (idade < 18) {
                     customToast.showCustomToast("Idade menor que 18 anos", Types.ERROR)
-                }
-            }
-            val newVoluntario = Voluntario(
-                nome,
-                telefone,
-                "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
-                tipoConta,
-                "",
-                "$ano-$mes-$dia",
-                cpf,
-                genero
-            )
-            if (usuario != null) {
-                newVoluntario.idUsuario = usuario.idUsuario
-                newVoluntario.dataCadastro = usuario.dataCadastro
-                newVoluntario.email = usuario.email
-                newVoluntario.idInfoConta = usuario.idInfoConta
-                newVoluntario.idUsuario = usuario.idUsuario
-            }
-            loadingUI = LoadingUI(binding.btnCadastrar, binding.progressCircular, null)
-            loadingUI.btnToLoading()
-            if (usuario == null) {
-                viewModel.register(newVoluntario, email, senha) {
-                    if (it.result) {
-                        customToast.showCustomToast(it.msg, Types.SUCESS)
-                        val delayMillis = 2000L // 2 segundos
+                } else {
+                    val newVoluntario = Voluntario(
+                        nome,
+                        telefone,
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}",
+                        tipoConta,
+                        "",
+                        "$ano-$mes-$dia",
+                        cpf,
+                        genero
+                    )
+                    newVoluntario.idUsuario = usuario.idUsuario
+                    newVoluntario.dataCadastro = usuario.dataCadastro
+                    newVoluntario.email = usuario.email
+                    newVoluntario.idInfoConta = usuario.idInfoConta
+                    newVoluntario.idUsuario = usuario.idUsuario
 
-                        // Use um Handler para ocultar a Toast após o atraso
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_registerVoluntarioFragment_to_loginFragment)
-                        }, delayMillis)
-                    } else {
-                        // O registro não foi bem-sucedido
-                        loadingUI.loadingToBtn()
-                        customToast.showCustomToast(it.msg, Types.ERROR)
-                    }
-                }
-            } else {
-                viewModel.updateUser(usuario.idInfoConta, newVoluntario) {
-                    if (it) {
-                        sharedViewModel.setUser(newVoluntario)
-                        customToast.showCustomToast(
-                            "Perfil atualizado com sucesso",
-                            Types.SUCESS
-                        )
-                        val delayMillis = 2000L // 2 segundos
+                    loadingUI = LoadingUI(binding.btnCadastrar, binding.progressCircular, null)
+                    loadingUI.btnToLoading()
+                    binding.btnExcluirPerfil.visibility = View.GONE
+                    viewModel.updateUser(usuario.idInfoConta, newVoluntario) {
+                        if (it) {
+                            sharedViewModel.setUser(newVoluntario)
+                            customToast.showCustomToast(
+                                "Perfil atualizado com sucesso",
+                                Types.SUCESS
+                            )
+                            val delayMillis = 2000L // 2 segundos
 
-                        // Use um Handler para ocultar a Toast após o atraso
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_registerVoluntarioFragment_to_homeFragment)
-                        }, delayMillis)
-                    } else {
-                        // O registro não foi bem-sucedido
-                        loadingUI.loadingToBtn()
-                        customToast.showCustomToast("Erro ao atualizar perfil", Types.ERROR)
+                            // Use um Handler para ocultar a Toast após o atraso
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                Navigation.findNavController(binding.root)
+                                    .navigate(R.id.action_registerVoluntarioFragment_to_homeFragment)
+                            }, delayMillis)
+                        } else {
+                            // O registro não foi bem-sucedido
+                            loadingUI.loadingToBtn()
+                            binding.btnExcluirPerfil.visibility = View.VISIBLE
+                            customToast.showCustomToast("Erro ao atualizar perfil", Types.ERROR)
+                        }
                     }
                 }
             }

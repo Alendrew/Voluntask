@@ -141,7 +141,36 @@ class RegisterInstituicaoFragment : Fragment() {
                     customToast.showCustomToast("Cnpj inválido", Types.ERROR)
                 } else if (!binding.inputTelefone.isDone) {
                     customToast.showCustomToast("Número de telefone inválido", Types.ERROR)
+                } else {
+                    val newInstituicao =
+                        Instituicao(
+                            nome,
+                            nomeResp,
+                            telefone,
+                            tipoConta,
+                            cnpj,
+                            "",
+                            cpfResp,
+                            "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}"
+                        )
+                    loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
+                    loadingUI.btnToLoading()
+                    viewModel.register(newInstituicao, email, senha) {
+                        if (it.result) {
+                            customToast.showCustomToast(it.msg, Types.SUCESS)
+                            val delayMillis = 2000L // 2 segundos
 
+                            // Use um Handler para ocultar a Toast após o atraso
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                Navigation.findNavController(binding.root)
+                                    .navigate(R.id.action_registerInstituicaoFragment_to_loginFragment)
+                            }, delayMillis)
+                        } else {
+                            // O registro não foi bem-sucedido
+                            loadingUI.loadingToBtn()
+                            customToast.showCustomToast(it.msg, Types.ERROR)
+                        }
+                    }
                 }
             } else {
                 if (
@@ -165,49 +194,30 @@ class RegisterInstituicaoFragment : Fragment() {
                 } else if (!binding.inputCnpj.isDone) {
                     customToast.showCustomToast("Cnpj inválido", Types.ERROR)
                 } else if (!binding.inputTelefone.isDone) {
-                    customToast.showCustomToast("Número de telefone inválido", Types.ERROR)
+                    customToast.showCustomToast(
+                        "Número de telefone inválido",
+                        Types.ERROR
+                    )
                 }
-            }
-
-            val newInstituicao =
-                Instituicao(
-                    nome,
-                    nomeResp,
-                    telefone,
-                    tipoConta,
-                    cnpj,
-                    "",
-                    cpfResp,
-                    "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}"
-                )
-            if (usuario != null) {
-                newInstituicao.idUsuario = usuario.idUsuario
+                val newInstituicao =
+                    Instituicao(
+                        nome,
+                        nomeResp,
+                        telefone,
+                        tipoConta,
+                        cnpj,
+                        "",
+                        cpfResp,
+                        "${dataCadastro.year}-${dataCadastro.month.value}-${dataCadastro.dayOfMonth}"
+                    )
+                newInstituicao.idUsuario = usuario!!.idUsuario
                 newInstituicao.dataCadastro = usuario.dataCadastro
                 newInstituicao.email = usuario.email
                 newInstituicao.idInfoConta = usuario.idInfoConta
                 newInstituicao.idUsuario = usuario.idUsuario
-            }
-            loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
-            loadingUI.btnToLoading()
-            if (usuario == null) {
-                viewModel.register(newInstituicao, email, senha) {
-                    if (it.result) {
-                        customToast.showCustomToast(it.msg, Types.SUCESS)
-                        val delayMillis = 2000L // 2 segundos
-
-                        // Use um Handler para ocultar a Toast após o atraso
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            Navigation.findNavController(binding.root)
-                                .navigate(R.id.action_registerInstituicaoFragment_to_loginFragment)
-                        }, delayMillis)
-                    } else {
-                        // O registro não foi bem-sucedido
-                        loadingUI.loadingToBtn()
-                        customToast.showCustomToast(it.msg, Types.ERROR)
-                    }
-                }
-            } else {
-
+                loadingUI = LoadingUI(binding.btnRegister, binding.progressCircular, null)
+                loadingUI.btnToLoading()
+                binding.btnExcluirPerfil.visibility = View.GONE
                 viewModel.updateUser(usuario.idInfoConta, newInstituicao) {
                     if (it) {
                         sharedViewModel.setUser(newInstituicao)
@@ -225,6 +235,7 @@ class RegisterInstituicaoFragment : Fragment() {
                     } else {
                         // O registro não foi bem-sucedido
                         loadingUI.loadingToBtn()
+                        binding.btnExcluirPerfil.visibility = View.VISIBLE
                         customToast.showCustomToast("Erro ao atualizar perfil", Types.ERROR)
                     }
                 }
